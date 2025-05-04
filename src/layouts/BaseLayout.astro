@@ -1,0 +1,23 @@
+---
+const { title = "Things Unbuilt" } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="font-sans p-4 max-w-screen-md mx-auto">
+    <header class="mb-6">
+      <nav class="space-x-4 text-lg">
+        <a href="/" class="hover:underline">home</a>
+        <a href="/randoms" class="hover:underline">randoms</a>
+        <a href="/blog" class="hover:underline">blog</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
