@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import '/src/styles/global.css';
+
+export async function getStaticPaths() {
+  const items = await getCollection('randoms');
+  return items.map((item) => ({
+    params: { slug: item.slug },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const gallery = item.data.gallery || [];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{item.data.title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="bg-white text-gray-900 font-sans p-4 max-w-screen-md mx-auto">
+    <header class="mb-6">
+      <nav class="space-x-4 text-lg">
+        <a href="/" class="hover:underline">home</a>
+        <a href="/randoms" class="hover:underline">randoms</a>
+        <a href="/blog" class="hover:underline">blog</a>
+      </nav>
+    </header>
+
+    <main class="space-y-6">
+      <h1 class="text-3xl font-bold">{item.data.title}</h1>
+      <p class="text-lg text-gray-700">{item.data.details}</p>
+      <img src={item.data.fullImage} alt={item.data.title} class="rounded shadow mb-4" />
+
+
+      {gallery.length > 0 && (
+        <section class="max-w-3xl mx-auto p-6 space-y-6">
+          {gallery.map((img, index) => (
+            <img src={img} alt={`Gallery image ${index + 1}`} class="rounded shadow" />
+          ))}
+        </section>
+      )}
+
+      <a href="/randoms" class="text-black-500 hover:underline mt-6 inline-block">← back to randoms</a>
+    </main>
+  </body>
+</html>

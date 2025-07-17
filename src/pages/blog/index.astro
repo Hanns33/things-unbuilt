@@ -1,0 +1,39 @@
+---
+import '/src/styles/global.css';
+import FloatingFeedback from '../../components/FloatingFeedback.astro';
+const posts = await Astro.glob('./*.astro');
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>blog</title>
+  </head>
+  <body class="bg-white text-gray-900 font-sans p-4 max-w-screen-md mx-auto">
+    <header class="mb-6">
+      <nav class="space-x-4 text-lg">
+        <a href="/" class="hover:underline">home</a>
+        <a href="/projects" class="hover:underline">projects</a>
+        <a href="/randoms" class="hover:underline">randoms</a>
+        <a href="/blog" class="hover:underline">blog</a>
+      </nav>
+    </header>
+
+    <main class="space-y-6">
+        <h1 class="text-3xl font-bold mb-2">blog</h1>
+        <p class="text-gray-600 mb-8">things we think</p>
+  
+        <ul class="space-y-4">
+          {posts.map((post) => (
+            <li>
+              <a href={post.url} class="block group">
+                <h2 class="text-xl font-semibold group-hover:underline">{post.frontmatter?.title || 'Untitled'}</h2>
+                <p class="text-gray-600">{post.frontmatter?.description || 'No description.'}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </main>
+      <FloatingFeedback />
+    </body>
+  </html>

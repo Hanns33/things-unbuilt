@@ -1,8 +1,56 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import '/src/styles/global.css';
+import FloatingFeedback from '../../components/FloatingFeedback.astro';
+
 ---
 
-<BaseLayout title="Project: table">
-  <h1 class="text-2xl font-bold mb-4">table</h1>
-  <p>This is the write-up for the table project.</p>
-</BaseLayout>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TABLE</title>
+  </head>
+  <body class="font-sans p-4 max-w-screen-md mx-auto">
+    <nav class="space-x-4 text-lg">
+      <a href="/" class="hover:underline">home</a>
+      <a href="/projects" class="hover:underline">projects</a>
+      <a href="/randoms" class="hover:underline">randoms</a>
+      <a href="/blog" class="hover:underline">blog</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto p-4 space-y-8">
+      <h1 class="text-9xl font-bold">TABLE</h1>
+      
+
+      <section class="grid grid-cols-1 gap-4">
+        <img src="/table/table garden.jpg" alt="Image 1" class="mb-5" />
+      </section>
+
+      <p class="text-gray-700 font-bold">mo (and also a hannes a bit) designed a table which whe haven't properly used yet</p>
+
+      <section class="grid grid-cols-1 gap-4">
+        <img src="/table/table garden 3.jpg" alt="Image 2" class="mb-20" />
+
+        
+        
+
+
+
+
+      </section>
+
+
+
+      
+    </main>
+
+    <script>
+      function updateMainImage(src) {
+        const main = document.getElementById('mainImage');
+        main.src = src;
+      }
+    </script>
+  </body>
+</html>
+<FloatingFeedback />

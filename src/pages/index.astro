@@ -1,17 +1,66 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FloatingFeedback from '../components/FloatingFeedback.astro';
 ---
 
 <BaseLayout title="Things Unbuilt">
-  <h1 class="text-2xl font-bold mb-10">welcome to +Things Unbuilt+</h1>
-  <p class="text-l text-black-700">hello friends</p>
+  <h1 class="text-9xl font-bold mb-20">THINGS UNBUILT</h1>
+  <p class="text-l text-black-700 mb-20">hello people and a warm welcome!</p>
+  <p class="text-l text-black-700">though we are serious about many things, this site isn't necessarily one of them.<br />
+  this is a space to showcase what we have been doing over the past years.<br />
+  we'd love to use this also to get some interactions.<br />
+  to hear from you out there, get some comments, feedback or critisicm.<br />
+  or if you're interested in some of things, please let us know!<br />
+
+
+  <p class="mb-20">
 
   <div class="mt-8">
-    <h2 class="text-2l font-semibold mb-2">somewhat serious projects</h2>
+    <h2 class="text-2l font-semibold mb-2">have a look around</h2>
     <ul class="list-disc pl-5 space-y-1">
-      <li><a href="/projects/shade" class="text-grey-600 hover:underline">shade</a></li>
-      <li><a href="/projects/table" class="text-grey-600 hover:underline">table</a></li>
-      <li><a href="/projects/candle" class="text-grey-600 hover:underline">candle</a></li>
+      <li><a href="/projects" class="text-grey-600 hover:uppercase hover:font-bold">things we call projects</a></li>
+      <li><a href="/randoms" class="text-grey-600 hover:uppercase hover:font-bold">all kinds of random things</a></li>
+      <li><a href="/blog" class="text-grey-600 hover:uppercase hover:font-bold">thougths, writings, ...</a></li>
     </ul>
   </div>
 </BaseLayout>
+
+<p class="mb-20">
+
+
+<html lang="en">
+  </head>
+  <body class="flex items-center justify-center min-h-screen bg-white text-black">
+    <main>
+      <a id="dynamic-link" href="/">
+        <img
+          id="dynamic-image"
+          src="/images/example.jpg"
+          alt="Random teaser"
+          class="w-80 h-80 object-cover rounded-2xl shadow-xl transition duration-500"
+        />
+      </a>
+    </main>
+
+    <script type="module">
+      const images = [
+        { src: '/images/1.jpg', link: '/projects/shade' },
+        { src: '/images/tp1.jpg', link: '/randoms/tipsy-people' },
+      ];
+
+      const imageEl = document.getElementById('dynamic-image');
+      const linkEl = document.getElementById('dynamic-link');
+
+      function updateImage() {
+        const random = images[Math.floor(Math.random() * images.length)];
+        imageEl.src = random.src;
+        linkEl.href = random.link;
+      }
+
+      updateImage();
+
+      setInterval(updateImage, 1000);
+    </script>
+
+<FloatingFeedback />
+

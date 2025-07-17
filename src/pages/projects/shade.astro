@@ -1,15 +1,18 @@
 ---
 import '/src/styles/global.css';
+import FloatingFeedback from '../../components/FloatingFeedback.astro';
+
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Shade Project</title>
+    <title>SHADE</title>
   </head>
   <body class="font-sans p-4 max-w-screen-md mx-auto">
     <nav class="space-x-4 text-lg">
       <a href="/" class="hover:underline">home</a>
+      <a href="/projects" class="hover:underline">projects</a>
       <a href="/randoms" class="hover:underline">randoms</a>
       <a href="/blog" class="hover:underline">blog</a>
         </div>
@@ -17,24 +20,33 @@ import '/src/styles/global.css';
     </nav>
 
     <main class="max-w-3xl mx-auto p-4 space-y-8">
-      <h1 class="text-3xl font-bold">Shade Project</h1>
-      <p class="text-gray-700">where we designed a sun shade for a parking lot wedding</p>
+      <h1 class="text-9xl font-bold">SHADE</h1>
+      
 
       <section class="grid grid-cols-1 gap-4">
-        <img src="/1.jpg" alt="Image 1" class="mb-20" />
-        <img src="/2.jpg" alt="Image 2" class="mb-20" />
-        <img src="/3.jpg" alt="Image 3" class="mb-20" />
+        <img src="/shade 2.jpg" alt="Image 1" class="mb-4" />
       </section>
 
-      <section>
-        <h2 class="text-2xl font-semibold mt-8">Feedback</h2>
-        <form class="mt-4 flex flex-col space-y-4">
-          <textarea class="w-full p-3 border border-gray-300 rounded" rows="5" placeholder="Write your comment or question..."></textarea>
-          <button type="submit" class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800">
-            Submit
-          </button>
-        </form>
+      <p class="text-gray-700 font-bold">where we designed a sun shade for a wonderful parking lot wedding</p>
+      <p class="mb-20">
+
+
+      <section class="grid grid-cols-1 gap-4">
+        <img src="/shade 1.jpg" alt="Image 2" class="mb-20" />
+        <img src="/shade 4.jpg" alt="Image 3" class="mb-20" />
+        <img src="/shade detail 1.jpg" alt="Image 4" class="mb-20" />
+        <img src="/shade detail 2.jpg" alt="Image 5" class="mb-20" />
+        <img src="/shade construction.jpg" alt="Image 6" class="mb-20" />
+        <img src="/shade construction 2.jpg" alt="Image 7" class="mb-20" />
+        <img src="/shade dark.jpg" alt="Image 8" class="mb-20" />
+
+
+
+
       </section>
+
+
+      
     </main>
 
     <script>
@@ -45,3 +57,4 @@ import '/src/styles/global.css';
     </script>
   </body>
 </html>
+<FloatingFeedback />

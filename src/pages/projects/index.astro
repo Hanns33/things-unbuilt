@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+const items = await getCollection('projects');
+import FloatingFeedback from '../../components/FloatingFeedback.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>projects</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="bg-white text-gray-900 font-sans p-4 max-w-screen-md mx-auto">
+    <header class="mb-6">
+      <nav class="space-x-4 text-lg">
+        <a href="/" class="hover:underline">home</a>
+        <a href="/projects" class="hover:underline">projects</a>
+        <a href="/randoms" class="hover:underline">randoms</a>
+        <a href="/blog" class="hover:underline">blog</a>
+      </nav>
+    </header>
+
+    <main class="space-y-8">
+      <h1 class="text-3xl font-bold">projects</h1>
+      <p class="text-gray-600">over the years we created a few things we'd like to share</p>      
+        <div class="mt-8">
+          <h2 class="text-2l font-semibold mb-2">somewhat serious projects</h2>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><a href="/projects/shade" class="text-grey-600 hover:uppercase hover:font-bold">shade</a></li>
+            <li><a href="/projects/table" class="text-grey-600 hover:uppercase hover:font-bold" >table</a></li>
+            <li><a href="/projects/candle" class="text-grey-600 hover:uppercase hover:font-bold">candle</a></li>
+          </ul>
+        </div>
+
+      {items.map(({ id, slug, data }) => (
+        <div class="mb-6 border-b pb-6">
+          <a href={`/randoms/${slug}`}>
+            <img src={data.thumbnail} alt={data.title} class="w-full max-w-xs rounded shadow" />
+            <h2 class="text-l font-semibold mt-2">{data.title}</h2>
+            <p>{data.description}</p>
+          </a>
+        </div>
+      ))}
+    </main>
+    <FloatingFeedback />
+  </body>
+</html>

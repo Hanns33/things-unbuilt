@@ -1,0 +1,57 @@
+---
+import '/src/styles/global.css';
+import FloatingFeedback from '../../components/FloatingFeedback.astro';
+
+
+export const frontmatter = {
+  title: '1 // poem',
+  description: 'on work and love',
+  pubDate: '2025-05-16',
+};
+
+const { title, description, pubDate } = frontmatter;
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-white text-gray-900 font-sans p-6 max-w-screen-md mx-auto">
+    <header class="mb-6">
+      <nav class="space-x-4 text-lg">
+        <a href="/" class="hover:underline">home</a>
+        <a href="/randoms" class="hover:underline">randoms</a>
+        <a href="/blog" class="hover:underline">blog</a>
+      </nav>
+    </header>
+
+    <main class="prose prose-gray lg:prose-lg">
+      <h1>{title}</h1>
+      <p class="text-sm text-gray-600">{new Date(pubDate).toDateString()}</p>
+
+      <p>Joseph Fasano</p>
+      <p>to love the work!</p>
+
+      <blockquote>
+        Now I let it fall back<br />
+        in the grasses.<br />
+        I hear you. I know<br />
+        this life is hard now.<br />
+        I know your days are precious<br />
+        on this earth.<br />
+        But what are you trying<br />
+        to be free of?<br />
+        The living? The miraculous<br />
+        task of it?<br />
+        Love is for the ones who love the work.
+      </blockquote>
+
+      <p>it's just wonderful.</p>
+      <p></p>
+
+    </main>
+
+    <a href="/blog" class="text-black-500 hover:underline mt-6 inline-block">← back to blog</a>
+  </body>
+</html>
+<FloatingFeedback />

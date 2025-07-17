@@ -1,0 +1,52 @@
+---
+// src/components/FloatingFeedback.astro
+---
+<style>
+  .feedback-float {
+    @apply fixed bottom-6 right-6 z-50;
+  }
+</style>
+
+<script type="module" client:load>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.querySelector('#feedback-toggle');
+    const form = document.querySelector('#feedback-form');
+    if (toggleBtn && form) {
+      toggleBtn.addEventListener('click', () => {
+        form.classList.toggle('hidden');
+      });
+    }
+  });
+</script>
+
+<div class="feedback-float">
+  <!-- Floating image button -->
+  <div id="feedback-toggle" class="cursor-pointer">
+    <img src="/Wolke.png" alt="Feedback" class="w-60 h-45" />
+  </div>
+
+  <!-- Feedback form -->
+  <div id="feedback-form" class="hidden mt-2 bg-white p-4 rounded-lg shadow-xl w-96 h-96">
+    <form action="https://formspree.io/f/mgvkaevk" method="POST" class="space-y-3">
+      <textarea
+        name="message"
+        rows="3"
+        required
+        placeholder="comment, feedback, inquiry, ..."
+        class="w-full p-2 border border-gray-300 rounded"
+      ></textarea>
+      <input
+        type="email"
+        name="email"
+        placeholder="(optional) your email"
+        class="w-full p-2 border border-gray-300 rounded"
+      />
+      <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded"
+      >
+        Send
+      </button>
+    </form>
+  </div>
+</div>
