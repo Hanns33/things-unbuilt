@@ -429,7 +429,6 @@
       <!-- <img src="logo.png" alt="Things Unbuilt"> -->
     </a>
     <ul class="nav-links">
-      <li><a href="#" onclick="showView('projects'); return false;" id="link-projects">projects</a></li>
       <li><a href="#" onclick="showView('randoms'); return false;" id="link-randoms">randoms</a></li>
       <li><a href="#" onclick="showView('notes'); return false;" id="link-notes">notes</a></li>
     </ul>
@@ -451,7 +450,6 @@
 
     <div class="project-list">
 
-      <!-- ── PROJECT 1 ────────────────────────────────────────── -->
       <div class="project">
         <div class="project-img-wrap" onclick="showView('project-shade')">
           <img src="/images/shade/shade-5.jpg" alt="Shade">
@@ -468,7 +466,6 @@
       </div>
 
 
-      <!-- ── PROJECT 2 ────────────────────────────────────────── -->
       <div class="project">
         <div class="project-img-wrap" onclick="showView('project-kitchen-light')">
           <img src="/images/kitchen-led/led-kitchen-1.jpg" alt="Kitchen Led">
@@ -484,7 +481,6 @@
         </div>
       </div>
 
-      <!-- ── PROJECT 2 ────────────────────────────────────────── -->
       <div class="project">
         <div class="project-img-wrap" onclick="showView('project-kitchen-light')">
           <img src="/images/campari/campari-6.jpg" alt="Campari Light">
@@ -500,7 +496,6 @@
         </div>
       </div>
 
-      <!-- ── PROJECT 2 ────────────────────────────────────────── -->
       <div class="project">
         <div class="project-img-wrap" onclick="showView('project-table')">
           <img src="/images/table/red-table.jpg" alt="Red Table">
@@ -516,7 +511,22 @@
         </div>
       </div>
 
-      <!-- ── PROJECT 3 ────────────────────────────────────────── -->
+      <div class="project">
+        <div class="project-img-wrap" onclick="showView('project-bar')">
+          <img src="/images/bar/bar.jpg" alt="Bar">
+        </div>
+        <div class="project-body">
+          <p class="project-number">1008</p>
+          <h2 class="project-title">Bar</h2>
+          <p class="project-note">
+            How can a bar be flexible?
+          </p>
+          <p class="project-for">prototype, 2017</p>
+          <a class="project-link" href="#" onclick="showView('project-table'); return false;">see more →</a>
+        </div>
+      </div>
+      
+
       <div class="project">
         <div class="project-img-wrap" onclick="showView('project-candle')">
           <img src="/images/candle/candle.jpg" alt="candle holder">
@@ -549,87 +559,6 @@
 
   </div><!-- /view-home -->
 
-
-  <!-- ============================================================
-       PROJECTS VIEW (full list)
-       ============================================================ -->
-  <div class="view" id="view-projects">
-    <p class="section-label" style="margin-bottom:2rem;">all projects</p>
-
-    <div class="project-list">
-
-      <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-shade')">
-          <div class="project-img-placeholder">
-            <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" style="aspect-ratio:4/3;width:100%;">
-              <rect width="400" height="300" fill="#e8e0d4"/>
-              <rect x="160" y="40" width="80" height="5" rx="2" fill="#a09080"/>
-              <rect x="130" y="45" width="140" height="120" rx="3" fill="#c8b8a8"/>
-              <rect x="140" y="55" width="120" height="105" rx="2" fill="#d8c8b8"/>
-              <ellipse cx="200" cy="165" rx="40" ry="8" fill="#90807070"/>
-              <rect x="186" y="173" width="14" height="60" rx="2" fill="#8a7a6a"/>
-              <rect x="200" y="173" width="14" height="60" rx="2" fill="#8a7a6a"/>
-              <rect x="148" y="230" width="104" height="6" rx="2" fill="#a09080"/>
-            </svg>
-          </div>
-        </div>
-        <div class="project-body">
-          <p class="project-number">No. 01</p>
-          <h2 class="project-title">Shade</h2>
-          <p class="project-note">A table lamp. One bent steel sheet, one bulb.</p>
-          <p class="project-for">— 2022</p>
-          <a class="project-link" href="#" onclick="showView('project-shade'); return false;">see more →</a>
-        </div>
-      </div>
-
-      <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-table')">
-          <div class="project-img-placeholder">
-            <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" style="aspect-ratio:4/3;width:100%;">
-              <rect width="400" height="300" fill="#ddd5c8"/>
-              <rect x="60" y="120" width="280" height="14" rx="3" fill="#8a7a6a"/>
-              <rect x="72" y="134" width="256" height="80" rx="3" fill="#9a8a7a"/>
-              <rect x="80" y="142" width="240" height="66" fill="#a89870"/>
-              <rect x="80" y="214" width="26" height="32" rx="3" fill="#7a6a5a"/>
-              <rect x="294" y="214" width="26" height="32" rx="3" fill="#7a6a5a"/>
-              <rect x="126" y="214" width="26" height="32" rx="3" fill="#7a6a5a"/>
-              <rect x="248" y="214" width="26" height="32" rx="3" fill="#7a6a5a"/>
-            </svg>
-          </div>
-        </div>
-        <div class="project-body">
-          <p class="project-number">No. 02</p>
-          <h2 class="project-title">Table</h2>
-          <p class="project-note">Oak top, steel legs. Built for a kitchen that needed something low and long.</p>
-          <p class="project-for">— 2021</p>
-          <a class="project-link" href="#" onclick="showView('project-table'); return false;">see more →</a>
-        </div>
-      </div>
-
-      <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-candle')">
-          <div class="project-img-placeholder">
-            <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" style="aspect-ratio:4/3;width:100%;">
-              <rect width="400" height="300" fill="#ece4d8"/>
-              <rect x="178" y="200" width="44" height="40" rx="4" fill="#b0a090"/>
-              <rect x="183" y="115" width="34" height="90" rx="5" fill="#d4c4a0"/>
-              <rect x="188" y="66" width="24" height="56" rx="12" fill="#e8d8b8"/>
-              <ellipse cx="200" cy="63" rx="10" ry="15" fill="#f0e4c0" opacity="0.9"/>
-              <ellipse cx="200" cy="58" rx="5" ry="8" fill="#f0d060" opacity="0.65"/>
-            </svg>
-          </div>
-        </div>
-        <div class="project-body">
-          <p class="project-number">No. 03</p>
-          <h2 class="project-title">Candle</h2>
-          <p class="project-note">Turned walnut base, hand-poured wax. × 12 for a wedding.</p>
-          <p class="project-for">— 2023</p>
-          <a class="project-link" href="#" onclick="showView('project-candle'); return false;">see more →</a>
-        </div>
-      </div>
-
-    </div>
-  </div><!-- /view-projects -->
 
 
   <!-- ============================================================
