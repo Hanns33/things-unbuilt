@@ -223,123 +223,31 @@
       justify-content: center;
     }
 
-    /* Fullscreen button — always visible, top-right of image */
+    /* Expand icon — appears on hover of the image */
+    .expand-btn {
+      display: none; /* replaced by fs-btn */
+    }
+
+    /* Fullscreen button — subtle, always visible, top-right */
     .fs-btn {
       position: absolute;
-      top: 10px;
+      top: 8px;
       right: 10px;
-      width: 32px;
-      height: 32px;
-      background: rgba(245,242,237,0.82);
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--color-text);
-      backdrop-filter: blur(4px);
-      z-index: 2;
-      font-size: 17px;
-      line-height: 1;
-      transition: background 0.15s;
-    }
-    .fs-btn:hover { background: rgba(245,242,237,1); }
-
-    /* ============================================================
-       FULLSCREEN OVERLAY
-       ============================================================ */
-    #fs-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: #131110;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    #fs-overlay.fs-open { display: flex; }
-
-    #fs-viewport {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-    }
-
-    #fs-track {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      transition: transform 0.42s cubic-bezier(0.25, 0.1, 0.25, 1);
-      will-change: transform;
-    }
-
-    /* Images in fullscreen — fixed height, natural width, contained */
-    #fs-track img {
-      flex-shrink: 0;
-      height: 86vh;
-      width: auto;
-      max-width: 90vw;
-      object-fit: contain;
-      display: block;
-      margin: 0 28px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    #fs-track img.fs-cur  { opacity: 1; }
-    #fs-track img.fs-adj  { opacity: 0.2; }
-
-    /* Close button */
-    #fs-close {
-      position: absolute;
-      top: 1.25rem;
-      right: 1.5rem;
       background: none;
       border: none;
-      color: rgba(245,242,237,0.45);
-      font-size: 28px;
       cursor: pointer;
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+      z-index: 2;
+      padding: 4px 5px;
       line-height: 1;
-      padding: 0.5rem;
-      z-index: 1001;
       transition: color 0.15s;
     }
-    #fs-close:hover { color: rgba(245,242,237,0.9); }
+    .fs-btn:hover { color: rgba(255,255,255,0.95); }
 
-    /* Dots */
-    #fs-dots {
-      position: absolute;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 7px;
-    }
-    .fs-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: rgba(245,242,237,0.2);
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .fs-dot.active { background: rgba(245,242,237,0.75); }
-
-    /* ============================================================
-       EXPANDED ROW
-       ============================================================ */
     .project-expanded {
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height 0.48s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .project-expanded.open {
-      max-height: 680px; /* tall enough for content + padding */
+      display: none; /* data source only — content shown in fullscreen */
     }
 
     .exp-inner {
@@ -657,6 +565,118 @@
       }
     }
 
+    /* ============================================================
+       FULLSCREEN OVERLAY
+       ============================================================ */
+    body.fs-active { overflow: hidden; }
+
+    #fs-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: #111009;
+      display: none;
+    }
+    #fs-overlay.fs-open { display: block; }
+
+    /* The scrolling track — each slide is exactly 100vw */
+    #fs-track {
+      display: flex;
+      height: 100vh;
+      /* transition set inline so we can disable it for instant jumps */
+    }
+
+    .fs-slide {
+      flex-shrink: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Image slides */
+    .fs-slide img {
+      max-width: 88vw;
+      max-height: 88vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Text / info slide */
+    .fs-slide.fs-text-slide {
+      cursor: default;
+      padding: 6vw;
+      align-items: flex-start;
+      padding-top: 12vh;
+    }
+
+    .fs-text-body {
+      max-width: 420px;
+    }
+
+    .fs-text-body p {
+      color: rgba(245,242,237,0.7);
+      font-size: var(--size-body);
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+    }
+    .fs-text-body p:last-child { margin-bottom: 0; }
+
+    .fs-text-body .exp-label {
+      font-size: var(--size-label);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(245,242,237,0.35);
+      margin-bottom: 0.25rem;
+      margin-top: 1.25rem;
+    }
+    .fs-text-body .exp-label:first-child { margin-top: 0; }
+
+    /* Close button */
+    #fs-close {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: rgba(245,242,237,0.35);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 0.4rem;
+      z-index: 1001;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    #fs-close:hover { color: rgba(245,242,237,0.85); }
+
+    /* Dots */
+    #fs-dots {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+      z-index: 1001;
+    }
+    .fs-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(245,242,237,0.2);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .fs-dot.active { background: rgba(245,242,237,0.7); }
+
   </style>
 </head>
 <body>
@@ -698,9 +718,10 @@
 
       <!-- ── SHADE ─────────────────────────────────────────────── -->
       <div class="project">
-        <div class="project-img-wrap" onclick="toggleExpand('shade')">
+        <div class="project-img-wrap" onclick="openFS(event, this, 'shade')">
           <img src="/images/shade/shade-5.jpg" alt="Shade">
-          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
+          <button class="expand-btn" aria-label="Expand project">
+          </button>
         </div>
         <div class="project-body">
           <p class="project-number">1032</p>
@@ -742,9 +763,8 @@
 
       <!-- ── KITCHEN LIGHT ──────────────────────────────────────── -->
       <div class="project">
-        <div class="project-img-wrap" onclick="toggleExpand('kitchen')">
+        <div class="project-img-wrap" onclick="openFS(event, this, 'kitchen')">
           <img src="/images/kitchen-led/led-kitchen-1.jpg" alt="Kitchen Light">
-          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
         </div>
         <div class="project-body">
           <p class="project-number">1043</p>
@@ -782,9 +802,11 @@
 
       <!-- ── CAMPARI LIGHT ──────────────────────────────────────── -->
       <div class="project">
-        <div class="project-img-wrap" onclick="toggleExpand('campari')">
+        <div class="project-img-wrap" onclick="openFS(event, this, 'campari')">
           <img src="/images/campari/campari-6.jpg" alt="Campari Light">
-          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
+          <button class="expand-btn" aria-label="Expand project">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
         <div class="project-body">
           <p class="project-number">1019</p>
@@ -819,9 +841,11 @@
 
       <!-- ── RED TABLE ──────────────────────────────────────────── -->
       <div class="project">
-        <div class="project-img-wrap" onclick="toggleExpand('table')">
+        <div class="project-img-wrap" onclick="openFS(event, this, 'table')">
           <img src="/images/table/red-table.jpg" alt="Red Table">
-          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
+          <button class="expand-btn" aria-label="Expand project">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
         <div class="project-body">
           <p class="project-number">1031</p>
@@ -856,9 +880,11 @@
 
       <!-- ── BAR ───────────────────────────────────────────────── -->
       <div class="project">
-        <div class="project-img-wrap" onclick="toggleExpand('bar')">
+        <div class="project-img-wrap" onclick="openFS(event, this, 'bar')">
           <img src="/images/bar/bar.jpg" alt="Bar">
-          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
+          <button class="expand-btn" aria-label="Expand project">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
         <div class="project-body">
           <p class="project-number">1008</p>
@@ -893,9 +919,11 @@
 
       <!-- ── CANDLE HOLDER ─────────────────────────────────────── -->
       <div class="project">
-        <div class="project-img-wrap" onclick="toggleExpand('candle')">
+        <div class="project-img-wrap" onclick="openFS(event, this, 'candle')">
           <img src="/images/candle/candle.jpg" alt="Candle Holder">
-          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
+          <button class="expand-btn" aria-label="Expand project">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
         <div class="project-body">
           <p class="project-number">1027</p>
@@ -1134,10 +1162,8 @@
 
 <!-- Fullscreen overlay -->
 <div id="fs-overlay">
+  <div id="fs-track"></div>
   <button id="fs-close">&#x2715;</button>
-  <div id="fs-viewport">
-    <div id="fs-track"></div>
-  </div>
   <div id="fs-dots"></div>
 </div>
 
@@ -1152,20 +1178,11 @@
   function showView(id) {
     views.forEach(v => v.classList.remove('active'));
     const target = document.getElementById('view-' + id);
-    if (target) {
-      target.classList.add('active');
-      viewHistory.push(id);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    navLinks.forEach(a => {
-      a.classList.toggle('active', a.id === 'link-' + id);
-    });
+    if (target) { target.classList.add('active'); viewHistory.push(id); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    navLinks.forEach(a => a.classList.toggle('active', a.id === 'link-' + id));
   }
 
-  history.back = function() {
-    viewHistory.pop();
-    showView(viewHistory.pop() || 'home');
-  };
+  history.back = function() { viewHistory.pop(); showView(viewHistory.pop() || 'home'); };
 
   /* ============================================================
      Randoms filter
@@ -1174,254 +1191,159 @@
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.random-item').forEach(item => {
-      if (category === 'all' || item.dataset.category === category)
-        item.classList.remove('hidden');
-      else
-        item.classList.add('hidden');
+      item.classList.toggle('hidden', category !== 'all' && item.dataset.category !== category);
     });
   }
 
   /* ============================================================
-     Expanded row carousels
+     FULLSCREEN
+     Each slide is exactly 100vw wide — positioning is pure arithmetic,
+     no DOM measurement needed, which makes transitions perfectly smooth.
      ============================================================ */
-  const carousels = {};
-
-  function initExpandCarousel(id) {
-    if (carousels[id]) return;
-    const expanded = document.getElementById('expand-' + id);
-    if (!expanded) return;
-
-    const track   = expanded.querySelector('.exp-track');
-    const slides  = Array.from(track.querySelectorAll('.exp-slide'));
-    const dotsEl  = document.getElementById('dots-' + id);
-    const prevBtn = expanded.querySelector('.exp-prev');
-    const nextBtn = expanded.querySelector('.exp-next');
-
-    slides.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'exp-dot' + (i === 0 ? ' active' : '');
-      dot.addEventListener('click', () => expGoTo(id, i));
-      dotsEl.appendChild(dot);
-    });
-
-    carousels[id] = { current: 0, slides, dotsEl, prevBtn, nextBtn, track };
-    expGoTo(id, 0, false);
-  }
-
-  function expLayout(id, animate) {
-    const c = carousels[id];
-    if (!c) return;
-    const containerW = c.track.parentElement.offsetWidth;
-    const gap = 16;
-    let offset = 0;
-    for (let i = 0; i < c.current; i++) offset += c.slides[i].offsetWidth + gap;
-    const center = (containerW - c.slides[c.current].offsetWidth) / 2;
-    if (!animate) c.track.style.transition = 'none';
-    c.track.style.transform = `translateX(${center - offset}px)`;
-    if (!animate) { c.track.offsetHeight; c.track.style.transition = ''; }
-  }
-
-  function expGoTo(id, index, animate = true) {
-    const c = carousels[id];
-    if (!c) return;
-    c.current = Math.max(0, Math.min(index, c.slides.length - 1));
-    c.slides.forEach((s, i) => { s.style.opacity = i === c.current ? '1' : '0.25'; });
-    c.dotsEl.querySelectorAll('.exp-dot').forEach((d, i) => d.classList.toggle('active', i === c.current));
-    c.prevBtn.disabled = c.current === 0;
-    c.nextBtn.disabled = c.current === c.slides.length - 1;
-    const img = c.slides[c.current].querySelector('img');
-    if (!img || img.offsetWidth > 0) expLayout(id, animate);
-    else img.addEventListener('load', () => expLayout(id, animate), { once: true });
-  }
-
-  function expGo(id, dir) {
-    const c = carousels[id];
-    if (c) expGoTo(id, c.current + dir);
-  }
-
-  /* ============================================================
-     Expand / collapse row
-     ============================================================ */
-  let openId = null;
-
-  function toggleExpand(id) {
-    if (openId === id) { closeExpand(id); return; }
-    if (openId) closeExpand(openId);
-    openExpand(id);
-  }
-
-  function openExpand(id) {
-    const el = document.getElementById('expand-' + id);
-    if (!el) return;
-    initExpandCarousel(id);
-    el.classList.add('open');
-    openId = id;
-    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
-    setTimeout(() => expLayout(id, false), 500);
-  }
-
-  function closeExpand(id) {
-    const el = document.getElementById('expand-' + id);
-    if (el) el.classList.remove('open');
-    if (openId === id) openId = null;
-  }
-
-  window.addEventListener('resize', () => { if (openId) expLayout(openId, false); });
-
-  /* ============================================================
-     FULLSCREEN — infinite looping carousel
-     ============================================================ */
-  const FS_GAP   = 56;   /* px between images in fullscreen */
-  let fsCurrent  = 1;    /* index in allSlides (1 = first real image) */
-  let fsSlides   = [];   /* all img elements including clones */
-  let fsTotal    = 0;    /* number of real images */
-  let fsJumping  = false;
-
   const fsOverlay  = document.getElementById('fs-overlay');
-  const fsViewport = document.getElementById('fs-viewport');
-  const fsTrack    = document.getElementById('fs-track');
-  const fsDots     = document.getElementById('fs-dots');
+  const fsTrackEl  = document.getElementById('fs-track');
+  const fsDotsEl   = document.getElementById('fs-dots');
   const fsCloseBtn = document.getElementById('fs-close');
 
-  /* Collect image src/alt from a project's expanded slides (skip text slides) */
-  function getProjectImages(projectId) {
+  let fsTotal   = 0;   /* number of real slides */
+  let fsCurrent = 1;   /* index in track (1 = first real slide) */
+  let fsLocked  = false; /* prevents jank from rapid clicks */
+
+  /* Called by image click or the ⛶ button */
+  function openFS(event, el, projectId) {
+    if (!projectId) {
+      /* derive id from the ⛶ button context */
+      const wrap     = el.closest ? el.closest('.project-img-wrap') : el;
+      const project  = wrap && wrap.closest('.project');
+      const expanded = project && project.nextElementSibling;
+      projectId      = expanded && expanded.id ? expanded.id.replace('expand-', '') : null;
+    }
+    if (!projectId) return;
+
     const expanded = document.getElementById('expand-' + projectId);
-    if (!expanded) return [];
-    return Array.from(expanded.querySelectorAll('.exp-slide:not(.exp-text-slide) img'))
-      .map(img => ({ src: img.src, alt: img.alt }));
-  }
+    if (!expanded) return;
 
-  /* ⛶ button click — figure out which project from the button's context */
-  function openFS(event, btn) {
-    event.stopPropagation(); /* don't trigger toggleExpand on the wrap */
-    const wrap = btn.closest('.project-img-wrap');
-    const project = wrap.closest('.project');
-    /* find the project id from the expanded section that follows */
-    const expanded = project.nextElementSibling;
-    const id = expanded && expanded.id ? expanded.id.replace('expand-', '') : null;
-    if (!id) return;
-    const images = getProjectImages(id);
-    if (images.length === 0) return;
-    fsOpen(images, 0);
-  }
+    const sources = Array.from(expanded.querySelectorAll('.exp-slide'));
+    if (sources.length === 0) return;
 
-  function fsOpen(images, startIndex) {
-    fsTotal   = images.length;
-    fsSlides  = [];
-    fsCurrent = 1;
+    fsTotal  = sources.length;
+    fsLocked = false;
 
-    /* Clear track and dots */
-    fsTrack.innerHTML = '';
-    fsDots.innerHTML  = '';
+    /* Build: [lastClone, slide0…slideN-1, firstClone] */
+    fsTrackEl.innerHTML = '';
+    fsDotsEl.innerHTML  = '';
 
-    /* Build: [lastClone, img0…imgN-1, firstClone] */
-    const srcs = images.map(i => i);
-    const allSrcs = [srcs[srcs.length - 1], ...srcs, srcs[0]];
+    const allSources = [sources[sources.length - 1], ...sources, sources[0]];
+    allSources.forEach(source => {
+      const slide = document.createElement('div');
+      slide.className = 'fs-slide';
 
-    allSrcs.forEach(({ src, alt }) => {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = alt || '';
-      fsTrack.appendChild(img);
-      fsSlides.push(img);
+      if (source.classList.contains('exp-text-slide')) {
+        slide.classList.add('fs-text-slide');
+        const body = source.querySelector('.exp-text-body');
+        if (body) {
+          const inner = document.createElement('div');
+          inner.className = 'fs-text-body';
+          inner.innerHTML = body.innerHTML;
+          slide.appendChild(inner);
+        }
+      } else {
+        const srcImg = source.querySelector('img');
+        if (srcImg) {
+          const img = document.createElement('img');
+          img.src = srcImg.src;
+          img.alt = srcImg.alt || '';
+          slide.appendChild(img);
+        }
+      }
+      fsTrackEl.appendChild(slide);
     });
 
-    /* Dots for real images only */
-    srcs.forEach((_, i) => {
+    /* Dots — one per real slide */
+    sources.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.className = 'fs-dot';
-      dot.addEventListener('click', (e) => { e.stopPropagation(); fsGoTo(i + 1); });
-      fsDots.appendChild(dot);
+      dot.addEventListener('click', e => { e.stopPropagation(); fsGoTo(i + 1); });
+      fsDotsEl.appendChild(dot);
     });
+
+    /* Show overlay, jump to first slide with no animation */
+    fsCurrent = 1;
+    fsTrackEl.style.transition = 'none';
+    fsSetTranslate();
+    fsTrackEl.offsetHeight; /* force reflow */
 
     fsOverlay.classList.add('fs-open');
-    document.body.style.overflow = 'hidden';
-
-    /* Start at correct real image */
-    const targetIndex = startIndex + 1; /* +1 for lastClone offset */
-    requestAnimationFrame(() => fsGoTo(targetIndex, false));
+    document.body.classList.add('fs-active');
+    fsUpdateDots();
   }
 
-  function fsLayout(animate) {
-    const vw = fsViewport.offsetWidth;
-    let offsetToCurrent = 0;
-    for (let i = 0; i < fsCurrent; i++) {
-      offsetToCurrent += fsSlides[i].offsetWidth + FS_GAP;
+  /* Position the track — each slide is exactly 100vw, so it's pure math */
+  function fsSetTranslate() {
+    fsTrackEl.style.transform = `translateX(${-fsCurrent * 100}vw)`;
+  }
+
+  function fsGoTo(index, animate = true) {
+    if (fsLocked && animate) return;
+    fsCurrent = index;
+    if (animate) {
+      fsLocked = true;
+      fsTrackEl.style.transition = 'transform 0.48s cubic-bezier(0.4, 0, 0.2, 1)';
+    } else {
+      fsTrackEl.style.transition = 'none';
     }
-    const currentW = fsSlides[fsCurrent].offsetWidth;
-    const center   = (vw - currentW) / 2;
-
-    if (!animate) fsTrack.style.transition = 'none';
-    fsTrack.style.transform = `translateX(${center - offsetToCurrent}px)`;
-    if (!animate) { fsTrack.offsetHeight; fsTrack.style.transition = ''; }
+    fsSetTranslate();
+    if (!animate) fsTrackEl.offsetHeight;
+    fsUpdateDots();
   }
 
-  function fsUpdateOpacity() {
-    fsSlides.forEach((img, i) => {
-      img.classList.remove('fs-cur', 'fs-adj');
-      if (i === fsCurrent)             img.classList.add('fs-cur');
-      else if (Math.abs(i - fsCurrent) === 1) img.classList.add('fs-adj');
-    });
-  }
+  /* After arriving at a clone → silently snap to the real slide */
+  fsTrackEl.addEventListener('transitionend', () => {
+    fsLocked = false;
+    if (fsCurrent === 0) {
+      fsTrackEl.style.transition = 'none';
+      fsCurrent = fsTotal;
+      fsSetTranslate();
+      fsTrackEl.offsetHeight;
+      fsUpdateDots();
+    } else if (fsCurrent === fsTotal + 1) {
+      fsTrackEl.style.transition = 'none';
+      fsCurrent = 1;
+      fsSetTranslate();
+      fsTrackEl.offsetHeight;
+      fsUpdateDots();
+    }
+  });
 
   function fsUpdateDots() {
     let real = fsCurrent - 1;
     if (fsCurrent === 0)           real = fsTotal - 1;
     if (fsCurrent === fsTotal + 1) real = 0;
-    fsDots.querySelectorAll('.fs-dot').forEach((d, i) => d.classList.toggle('active', i === real));
+    fsDotsEl.querySelectorAll('.fs-dot').forEach((d, i) => d.classList.toggle('active', i === real));
   }
 
-  function fsGoTo(index, animate = true) {
-    fsCurrent = index;
-    const el = fsSlides[fsCurrent];
-    if (!el) return;
-
-    fsUpdateOpacity();
-    fsUpdateDots();
-
-    if (el.offsetWidth > 0) {
-      fsLayout(animate);
-    } else {
-      el.addEventListener('load', () => fsLayout(animate), { once: true });
-    }
-  }
-
-  /* After sliding to a clone → silently jump to the real image */
-  fsTrack.addEventListener('transitionend', () => {
-    if (fsJumping) return;
-    if (fsCurrent === 0) {
-      fsJumping = true;
-      fsGoTo(fsTotal, false);
-      fsJumping = false;
-    } else if (fsCurrent === fsTotal + 1) {
-      fsJumping = true;
-      fsGoTo(1, false);
-      fsJumping = false;
-    }
-  });
-
-  /* Click left/right half of viewport */
-  fsViewport.addEventListener('click', (e) => {
+  /* Click left/right to navigate */
+  fsOverlay.addEventListener('click', e => {
+    if (fsCloseBtn.contains(e.target)) return;
+    if (e.target.classList.contains('fs-dot')) return;
     if (e.clientX < window.innerWidth / 2) fsGoTo(fsCurrent - 1);
     else                                    fsGoTo(fsCurrent + 1);
   });
 
   function fsClose() {
     fsOverlay.classList.remove('fs-open');
-    document.body.style.overflow = '';
+    document.body.classList.remove('fs-active');
+    /* Clear track to free memory */
+    setTimeout(() => { fsTrackEl.innerHTML = ''; fsDotsEl.innerHTML = ''; }, 300);
   }
 
   fsCloseBtn.addEventListener('click', fsClose);
 
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', e => {
     if (!fsOverlay.classList.contains('fs-open')) return;
-    if (e.key === 'Escape')      fsClose();
-    if (e.key === 'ArrowRight')  fsGoTo(fsCurrent + 1);
-    if (e.key === 'ArrowLeft')   fsGoTo(fsCurrent - 1);
-  });
-
-  window.addEventListener('resize', () => {
-    if (fsOverlay.classList.contains('fs-open')) fsLayout(false);
+    if (e.key === 'Escape')     fsClose();
+    if (e.key === 'ArrowRight') fsGoTo(fsCurrent + 1);
+    if (e.key === 'ArrowLeft')  fsGoTo(fsCurrent - 1);
   });
 
   /* ============================================================
