@@ -69,6 +69,7 @@
       font-size: var(--size-body);
       line-height: 1.75;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden; /* prevents horizontal scroll from full-bleed carousel */
     }
 
     a { color: inherit; text-decoration: none; }
@@ -193,22 +194,36 @@
       display: flex;
       gap: var(--space-img-gap);
       align-items: flex-start;
+      position: relative;
     }
 
     /* ============================================================
-       CAROUSEL
+       CAROUSEL — full-bleed, fixed height, faded adjacent images
        ============================================================ */
+
+    /* Reserves the correct space in the flex layout */
     .carousel-wrap {
       flex: 0 0 var(--img-width);
       position: relative;
+      min-width: 0;
     }
 
-    .carousel {
-      overflow: hidden;
-      border-radius: var(--img-radius);
+    /* Invisible block that gives the wrap its height in the flow.
+       The actual carousel is absolutely positioned over this. */
+    .carousel-spacer {
       height: var(--carousel-height);
+      pointer-events: none;
+    }
+
+    /* The carousel breaks out to full viewport width.
+       left and width are set by JS after measuring the wrap position. */
+    .carousel {
+      position: absolute;
+      top: 0;
+      height: var(--carousel-height);
+      z-index: 1;
       cursor: pointer;
-      position: relative;
+      /* No overflow: hidden — adjacent images must be visible */
     }
 
     .carousel-track {
@@ -219,7 +234,7 @@
       will-change: transform;
     }
 
-    /* images keep their natural ratio at fixed height */
+    /* Override the global img { width: 100% } rule */
     .carousel-track img {
       height: 100%;
       width: auto;
@@ -227,54 +242,33 @@
       border-radius: var(--img-radius);
       object-fit: cover;
       display: block;
-      pointer-events: none;
       user-select: none;
-    }
-
-    /* clickable half-overlays for prev/next */
-    .carousel-hit-prev,
-    .carousel-hit-next {
-      position: absolute;
-      top: 0;
-      width: 50%;
-      height: 100%;
-      z-index: 2;
-    }
-    .carousel-hit-prev { left: 0; cursor: w-resize; }
-    .carousel-hit-next { right: 0; cursor: e-resize; }
-
-    /* arrow buttons — appear on hover */
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 3;
-      background: rgba(245,242,237,0.88);
-      border: none;
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      font-size: 17px;
-      line-height: 1;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      pointer-events: none;
+      /* all images start invisible */
       opacity: 0;
-      transition: opacity 0.2s ease;
-      color: var(--color-text);
-      backdrop-filter: blur(4px);
+      transition: opacity 0.4s ease;
     }
-    .carousel-wrap:hover .carousel-btn { opacity: 1; }
-    .carousel-btn:disabled { opacity: 0 !important; pointer-events: none; }
-    .carousel-prev { left: 10px; }
-    .carousel-next { right: 10px; }
+
+    /* The active/current image */
+    .carousel-track img.is-current {
+      opacity: 1;
+      cursor: default;
+    }
+
+    /* The immediately adjacent images — faded, clickable */
+    .carousel-track img.is-adjacent {
+      opacity: 0.15;
+      pointer-events: auto;
+      cursor: pointer;
+    }
 
     /* dots */
     .carousel-dots {
       display: flex;
       gap: 6px;
       margin-top: 10px;
+      position: relative;
+      z-index: 2;
     }
 
     .carousel-dot {
@@ -290,7 +284,10 @@
 
     .carousel-dot.active { background: var(--color-text); }
 
+    /* Text column sits above the faded carousel images */
     .project-body {
+      position: relative;
+      z-index: 2;
       flex: 1;
       padding-top: 0.25rem;
     }
@@ -523,6 +520,7 @@
 
       <div class="project">
         <div class="carousel-wrap">
+          <div class="carousel-spacer"></div>
           <div class="carousel">
             <div class="carousel-track">
               <img src="/images/shade/shade-5.jpg" alt="Shade">
@@ -534,10 +532,6 @@
               <img src="/images/shade/shade-construction-2.jpg" alt="Shade">
               <img src="/images/shade/shade-dark.jpg" alt="Shade">
             </div>
-            <div class="carousel-hit-prev"></div>
-            <div class="carousel-hit-next"></div>
-            <button class="carousel-btn carousel-prev">&#8249;</button>
-            <button class="carousel-btn carousel-next">&#8250;</button>
           </div>
           <div class="carousel-dots"></div>
         </div>
@@ -552,17 +546,15 @@
       </div>
 
 
+
       <div class="project">
         <div class="carousel-wrap">
+          <div class="carousel-spacer"></div>
           <div class="carousel">
             <div class="carousel-track">
               <img src="/images/kitchen-led/led-kitchen-1.jpg" alt="Kitchen Light">
               <!-- add more: <img src="/images/kitchen-led/led-kitchen-2.jpg" alt="Kitchen Light"> -->
             </div>
-            <div class="carousel-hit-prev"></div>
-            <div class="carousel-hit-next"></div>
-            <button class="carousel-btn carousel-prev">&#8249;</button>
-            <button class="carousel-btn carousel-next">&#8250;</button>
           </div>
           <div class="carousel-dots"></div>
         </div>
@@ -578,15 +570,12 @@
 
       <div class="project">
         <div class="carousel-wrap">
+          <div class="carousel-spacer"></div>
           <div class="carousel">
             <div class="carousel-track">
               <img src="/images/campari/campari-6.jpg" alt="Campari Light">
               <!-- add more: <img src="/images/campari/campari-1.jpg" alt="Campari Light"> -->
             </div>
-            <div class="carousel-hit-prev"></div>
-            <div class="carousel-hit-next"></div>
-            <button class="carousel-btn carousel-prev">&#8249;</button>
-            <button class="carousel-btn carousel-next">&#8250;</button>
           </div>
           <div class="carousel-dots"></div>
         </div>
@@ -602,15 +591,12 @@
 
       <div class="project">
         <div class="carousel-wrap">
+          <div class="carousel-spacer"></div>
           <div class="carousel">
             <div class="carousel-track">
               <img src="/images/table/red-table.jpg" alt="Red Table">
               <!-- add more: <img src="/images/table/red-table-2.jpg" alt="Red Table"> -->
             </div>
-            <div class="carousel-hit-prev"></div>
-            <div class="carousel-hit-next"></div>
-            <button class="carousel-btn carousel-prev">&#8249;</button>
-            <button class="carousel-btn carousel-next">&#8250;</button>
           </div>
           <div class="carousel-dots"></div>
         </div>
@@ -626,15 +612,12 @@
 
       <div class="project">
         <div class="carousel-wrap">
+          <div class="carousel-spacer"></div>
           <div class="carousel">
             <div class="carousel-track">
               <img src="/images/bar/bar.jpg" alt="Bar">
               <!-- add more: <img src="/images/bar/bar-2.jpg" alt="Bar"> -->
             </div>
-            <div class="carousel-hit-prev"></div>
-            <div class="carousel-hit-next"></div>
-            <button class="carousel-btn carousel-prev">&#8249;</button>
-            <button class="carousel-btn carousel-next">&#8250;</button>
           </div>
           <div class="carousel-dots"></div>
         </div>
@@ -647,19 +630,15 @@
           <p class="project-for">prototype, 2017</p>
         </div>
       </div>
-      
 
       <div class="project">
         <div class="carousel-wrap">
+          <div class="carousel-spacer"></div>
           <div class="carousel">
             <div class="carousel-track">
               <img src="/images/candle/candle.jpg" alt="Candle Holder">
               <!-- add more: <img src="/images/candle/candle-2.jpg" alt="Candle Holder"> -->
             </div>
-            <div class="carousel-hit-prev"></div>
-            <div class="carousel-hit-next"></div>
-            <button class="carousel-btn carousel-prev">&#8249;</button>
-            <button class="carousel-btn carousel-next">&#8250;</button>
           </div>
           <div class="carousel-dots"></div>
         </div>
@@ -920,96 +899,93 @@
   }
 
   /* ============================================================
-     Carousel
+     Carousel — full-bleed with faded adjacent images
      ============================================================ */
   function initCarousel(wrap) {
-    const carousel  = wrap.querySelector('.carousel');
-    const track     = wrap.querySelector('.carousel-track');
-    const dotsWrap  = wrap.querySelector('.carousel-dots');
-    const prevBtn   = wrap.querySelector('.carousel-prev');
-    const nextBtn   = wrap.querySelector('.carousel-next');
-    const hitPrev   = wrap.querySelector('.carousel-hit-prev');
-    const hitNext   = wrap.querySelector('.carousel-hit-next');
-    const imgs      = Array.from(track.querySelectorAll('img'));
+    const carousel = wrap.querySelector('.carousel');
+    const track    = wrap.querySelector('.carousel-track');
+    const dotsWrap = wrap.querySelector('.carousel-dots');
+    const imgs     = Array.from(track.querySelectorAll('img'));
 
     if (imgs.length === 0) return;
 
-    // hide navigation entirely if only one image
-    if (imgs.length === 1) {
-      prevBtn.style.display = 'none';
-      nextBtn.style.display = 'none';
-      hitPrev.style.display = 'none';
-      hitNext.style.display = 'none';
-    }
-
     let current = 0;
 
-    // build dots
+    /* build dots */
     imgs.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
       dot.setAttribute('aria-label', 'Go to image ' + (i + 1));
-      dot.addEventListener('click', () => goTo(i));
+      dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); });
       dotsWrap.appendChild(dot);
     });
 
     const dots = Array.from(dotsWrap.querySelectorAll('.carousel-dot'));
 
     function getGap() {
-      // read the CSS variable for gap
       return parseFloat(getComputedStyle(document.documentElement)
         .getPropertyValue('--carousel-gap')) || 10;
     }
 
-    function getPeek() {
-      return parseFloat(getComputedStyle(document.documentElement)
-        .getPropertyValue('--carousel-peek')) || 40;
+    function layout() {
+      /* How far is the wrap's left edge from the viewport left? */
+      const wrapLeft = wrap.getBoundingClientRect().left;
+
+      /* Stretch carousel to full viewport width, anchored at viewport left */
+      carousel.style.left  = -wrapLeft + 'px';
+      carousel.style.width = '100vw';
+
+      /* Offset to current image in the track */
+      const gap = getGap();
+      let offsetToImg = 0;
+      for (let i = 0; i < current; i++) {
+        offsetToImg += imgs[i].offsetWidth + gap;
+      }
+
+      /* Position track so current image aligns with wrap left */
+      track.style.transform = `translateX(${wrapLeft - offsetToImg}px)`;
+    }
+
+    function updateOpacity() {
+      imgs.forEach((img, i) => {
+        img.classList.remove('is-current', 'is-adjacent');
+        if (i === current)                          img.classList.add('is-current');
+        else if (i === current - 1 || i === current + 1) img.classList.add('is-adjacent');
+      });
     }
 
     function goTo(index) {
       current = Math.max(0, Math.min(index, imgs.length - 1));
-
-      // sum up widths of all images before current
-      const gap = getGap();
-      let offset = 0;
-      for (let i = 0; i < current; i++) {
-        offset += imgs[i].offsetWidth + gap;
-      }
-
-      // pull back slightly to show peek of previous image
-      if (current > 0) offset -= getPeek();
-
-      track.style.transform = `translateX(${-offset}px)`;
-
-      // update dots
+      layout();
+      updateOpacity();
       dots.forEach((d, i) => d.classList.toggle('active', i === current));
-
-      // update buttons
-      prevBtn.disabled = current === 0;
-      nextBtn.disabled = current === imgs.length - 1;
     }
 
-    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
-    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
-    hitPrev.addEventListener('click', () => goTo(current - 1));
-    hitNext.addEventListener('click', () => goTo(current + 1));
+    /* Clicking left/right of the current image navigates */
+    carousel.addEventListener('click', (e) => {
+      if (!imgs[current]) return;
+      const rect = imgs[current].getBoundingClientRect();
+      if (e.clientX < rect.left && current > 0)              goTo(current - 1);
+      else if (e.clientX > rect.right && current < imgs.length - 1) goTo(current + 1);
+    });
 
-    // wait for images to load so offsetWidth is correct
+    /* Reposition on resize */
+    window.addEventListener('resize', layout);
+
+    /* Wait for images to load for accurate widths */
     let loaded = 0;
     function onLoad() {
       loaded++;
       if (loaded === imgs.length) goTo(0);
     }
     imgs.forEach(img => {
-      if (img.complete && img.naturalWidth > 0) {
-        onLoad();
-      } else {
+      if (img.complete && img.naturalWidth > 0) onLoad();
+      else {
         img.addEventListener('load', onLoad);
-        img.addEventListener('error', onLoad); // don't block on broken images
+        img.addEventListener('error', onLoad);
       }
     });
 
-    // also call immediately (handles fully cached pages)
     goTo(0);
   }
 
