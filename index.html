@@ -34,8 +34,11 @@
 
       /* Image */
       --img-width:      80%;      /* width of project image column */
-      --img-ratio:      5 / 3;    /* aspect ratio of project images */
+      --img-ratio:      5 / 3;    /* aspect ratio of project images (unused by carousel) */
       --img-radius:     4px;      /* corner radius on images */
+      --carousel-height: 380px;   /* fixed height of all carousel images — adjust this */
+      --carousel-gap:   10px;     /* gap between images in the carousel */
+      --carousel-peek:  40px;     /* how much of the previous image peeks in */
 
       /* Randoms grid */
       --grid-cols:      4;        /* columns in randoms grid (use integer) */
@@ -192,34 +195,100 @@
       align-items: flex-start;
     }
 
-    .project-img-wrap {
+    /* ============================================================
+       CAROUSEL
+       ============================================================ */
+    .carousel-wrap {
       flex: 0 0 var(--img-width);
-      cursor: pointer;
+      position: relative;
+    }
+
+    .carousel {
       overflow: hidden;
       border-radius: var(--img-radius);
-      background: var(--color-tag-bg);
+      height: var(--carousel-height);
+      cursor: pointer;
+      position: relative;
     }
 
-    .project-img-wrap img,
-    .project-img-placeholder {
-      width: 100%;
-      aspect-ratio: var(--img-ratio);
+    .carousel-track {
+      display: flex;
+      gap: var(--carousel-gap);
+      height: 100%;
+      transition: transform 0.42s cubic-bezier(0.25, 0.1, 0.25, 1);
+      will-change: transform;
+    }
+
+    /* images keep their natural ratio at fixed height */
+    .carousel-track img {
+      height: 100%;
+      width: auto;
+      flex-shrink: 0;
+      border-radius: var(--img-radius);
       object-fit: cover;
       display: block;
-      transition: transform 0.3s ease;
+      pointer-events: none;
+      user-select: none;
     }
 
-    .project-img-wrap:hover img,
-    .project-img-wrap:hover .project-img-placeholder {
-      transform: scale(1.02);
+    /* clickable half-overlays for prev/next */
+    .carousel-hit-prev,
+    .carousel-hit-next {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 2;
     }
+    .carousel-hit-prev { left: 0; cursor: w-resize; }
+    .carousel-hit-next { right: 0; cursor: e-resize; }
 
-    /* placeholder SVG — remove once you have real photos */
-    .project-img-placeholder {
+    /* arrow buttons — appear on hover */
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      background: rgba(245,242,237,0.88);
+      border: none;
+      border-radius: 50%;
+      width: 34px;
+      height: 34px;
+      font-size: 17px;
+      line-height: 1;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      color: var(--color-text);
+      backdrop-filter: blur(4px);
     }
+    .carousel-wrap:hover .carousel-btn { opacity: 1; }
+    .carousel-btn:disabled { opacity: 0 !important; pointer-events: none; }
+    .carousel-prev { left: 10px; }
+    .carousel-next { right: 10px; }
+
+    /* dots */
+    .carousel-dots {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .carousel-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--color-divider);
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+      padding: 0;
+    }
+
+    .carousel-dot.active { background: var(--color-text); }
 
     .project-body {
       flex: 1;
@@ -393,6 +462,7 @@
     @media (max-width: 640px) {
       :root {
         --img-width: 100%;
+        --carousel-height: 240px;
         --grid-cols: 2;
         --space-page-x: 1.25rem;
       }
@@ -401,8 +471,9 @@
         flex-direction: column;
       }
 
-      .project-img-wrap {
+      .carousel-wrap {
         flex: 0 0 100%;
+        width: 100%;
       }
 
       .footer-block {
@@ -451,8 +522,18 @@
     <div class="project-list">
 
       <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-shade')">
-          <img src="/images/shade/shade-5.jpg" alt="Shade">
+        <div class="carousel-wrap">
+          <div class="carousel">
+            <div class="carousel-track">
+              <img src="/images/shade/shade-5.jpg" alt="Shade">
+              <!-- add more images: <img src="/images/shade/shade-2.jpg" alt="Shade"> -->
+            </div>
+            <div class="carousel-hit-prev"></div>
+            <div class="carousel-hit-next"></div>
+            <button class="carousel-btn carousel-prev">&#8249;</button>
+            <button class="carousel-btn carousel-next">&#8250;</button>
+          </div>
+          <div class="carousel-dots"></div>
         </div>
         <div class="project-body">
           <p class="project-number">1032</p>
@@ -461,14 +542,23 @@
             How do you make a shade for a parking lot?
           </p>
           <p class="project-for">for Alissa & Alexej, 2025</p>
-          <a class="project-link" href="#" onclick="showView('project-shade'); return false;">see more →</a>
         </div>
       </div>
 
 
       <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-kitchen-light')">
-          <img src="/images/kitchen-led/led-kitchen-1.jpg" alt="Kitchen Led">
+        <div class="carousel-wrap">
+          <div class="carousel">
+            <div class="carousel-track">
+              <img src="/images/kitchen-led/led-kitchen-1.jpg" alt="Kitchen Light">
+              <!-- add more: <img src="/images/kitchen-led/led-kitchen-2.jpg" alt="Kitchen Light"> -->
+            </div>
+            <div class="carousel-hit-prev"></div>
+            <div class="carousel-hit-next"></div>
+            <button class="carousel-btn carousel-prev">&#8249;</button>
+            <button class="carousel-btn carousel-next">&#8250;</button>
+          </div>
+          <div class="carousel-dots"></div>
         </div>
         <div class="project-body">
           <p class="project-number">1043</p>
@@ -477,13 +567,22 @@
             How to make a sleek light for a sleek kitchen?
           </p>
           <p class="project-for">for Susanne, 2026</p>
-          <a class="project-link" href="#" onclick="showView('project-table'); return false;">see more →</a>
         </div>
       </div>
 
       <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-kitchen-light')">
-          <img src="/images/campari/campari-6.jpg" alt="Campari Light">
+        <div class="carousel-wrap">
+          <div class="carousel">
+            <div class="carousel-track">
+              <img src="/images/campari/campari-6.jpg" alt="Campari Light">
+              <!-- add more: <img src="/images/campari/campari-1.jpg" alt="Campari Light"> -->
+            </div>
+            <div class="carousel-hit-prev"></div>
+            <div class="carousel-hit-next"></div>
+            <button class="carousel-btn carousel-prev">&#8249;</button>
+            <button class="carousel-btn carousel-next">&#8250;</button>
+          </div>
+          <div class="carousel-dots"></div>
         </div>
         <div class="project-body">
           <p class="project-number">1019</p>
@@ -492,13 +591,22 @@
             How to make red light not look bad?
           </p>
           <p class="project-for">for Susanne, 2023</p>
-          <a class="project-link" href="#" onclick="showView('project-table'); return false;">see more →</a>
         </div>
       </div>
 
       <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-table')">
-          <img src="/images/table/red-table.jpg" alt="Red Table">
+        <div class="carousel-wrap">
+          <div class="carousel">
+            <div class="carousel-track">
+              <img src="/images/table/red-table.jpg" alt="Red Table">
+              <!-- add more: <img src="/images/table/red-table-2.jpg" alt="Red Table"> -->
+            </div>
+            <div class="carousel-hit-prev"></div>
+            <div class="carousel-hit-next"></div>
+            <button class="carousel-btn carousel-prev">&#8249;</button>
+            <button class="carousel-btn carousel-next">&#8250;</button>
+          </div>
+          <div class="carousel-dots"></div>
         </div>
         <div class="project-body">
           <p class="project-number">1031</p>
@@ -507,13 +615,22 @@
             How to make a bar table look cool?
           </p>
           <p class="project-for">prototype, 2025</p>
-          <a class="project-link" href="#" onclick="showView('project-table'); return false;">see more →</a>
         </div>
       </div>
 
       <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-bar')">
-          <img src="/images/bar/bar.jpg" alt="Bar">
+        <div class="carousel-wrap">
+          <div class="carousel">
+            <div class="carousel-track">
+              <img src="/images/bar/bar.jpg" alt="Bar">
+              <!-- add more: <img src="/images/bar/bar-2.jpg" alt="Bar"> -->
+            </div>
+            <div class="carousel-hit-prev"></div>
+            <div class="carousel-hit-next"></div>
+            <button class="carousel-btn carousel-prev">&#8249;</button>
+            <button class="carousel-btn carousel-next">&#8250;</button>
+          </div>
+          <div class="carousel-dots"></div>
         </div>
         <div class="project-body">
           <p class="project-number">1008</p>
@@ -522,23 +639,31 @@
             How can a bar be flexible?
           </p>
           <p class="project-for">prototype, 2017</p>
-          <a class="project-link" href="#" onclick="showView('project-table'); return false;">see more →</a>
         </div>
       </div>
       
 
       <div class="project">
-        <div class="project-img-wrap" onclick="showView('project-candle')">
-          <img src="/images/candle/candle.jpg" alt="candle holder">
+        <div class="carousel-wrap">
+          <div class="carousel">
+            <div class="carousel-track">
+              <img src="/images/candle/candle.jpg" alt="Candle Holder">
+              <!-- add more: <img src="/images/candle/candle-2.jpg" alt="Candle Holder"> -->
+            </div>
+            <div class="carousel-hit-prev"></div>
+            <div class="carousel-hit-next"></div>
+            <button class="carousel-btn carousel-prev">&#8249;</button>
+            <button class="carousel-btn carousel-next">&#8250;</button>
+          </div>
+          <div class="carousel-dots"></div>
         </div>
         <div class="project-body">
           <p class="project-number">1027</p>
           <h2 class="project-title"><strong>Candle Holder</strong></h2>
           <p class="project-note">
-            How can I make a quick welcome present with things at hime?
+            How can I make a quick welcome present with things at home?
           </p>
           <p class="project-for">for Katie, Laura and Anna, 2024</p>
-          <a class="project-link" href="#" onclick="showView('project-candle'); return false;">see more →</a>
         </div>
       </div>
 
@@ -748,9 +873,8 @@
 
 <script>
   /* ============================================================
-     Simple routing — no library needed
+     Simple routing
      ============================================================ */
-
   const views = document.querySelectorAll('.view');
   const navLinks = document.querySelectorAll('.nav-links a');
   const viewHistory = [];
@@ -768,7 +892,6 @@
     });
   }
 
-  /* back button support */
   history.back = function() {
     viewHistory.pop();
     const prev = viewHistory.pop() || 'home';
@@ -781,7 +904,6 @@
   function filterRandoms(category, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-
     document.querySelectorAll('.random-item').forEach(item => {
       if (category === 'all' || item.dataset.category === category) {
         item.classList.remove('hidden');
@@ -791,8 +913,109 @@
     });
   }
 
-  /* init */
+  /* ============================================================
+     Carousel
+     ============================================================ */
+  function initCarousel(wrap) {
+    const carousel  = wrap.querySelector('.carousel');
+    const track     = wrap.querySelector('.carousel-track');
+    const dotsWrap  = wrap.querySelector('.carousel-dots');
+    const prevBtn   = wrap.querySelector('.carousel-prev');
+    const nextBtn   = wrap.querySelector('.carousel-next');
+    const hitPrev   = wrap.querySelector('.carousel-hit-prev');
+    const hitNext   = wrap.querySelector('.carousel-hit-next');
+    const imgs      = Array.from(track.querySelectorAll('img'));
+
+    if (imgs.length === 0) return;
+
+    // hide navigation entirely if only one image
+    if (imgs.length === 1) {
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      hitPrev.style.display = 'none';
+      hitNext.style.display = 'none';
+    }
+
+    let current = 0;
+
+    // build dots
+    imgs.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to image ' + (i + 1));
+      dot.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(dot);
+    });
+
+    const dots = Array.from(dotsWrap.querySelectorAll('.carousel-dot'));
+
+    function getGap() {
+      // read the CSS variable for gap
+      return parseFloat(getComputedStyle(document.documentElement)
+        .getPropertyValue('--carousel-gap')) || 10;
+    }
+
+    function getPeek() {
+      return parseFloat(getComputedStyle(document.documentElement)
+        .getPropertyValue('--carousel-peek')) || 40;
+    }
+
+    function goTo(index) {
+      current = Math.max(0, Math.min(index, imgs.length - 1));
+
+      // sum up widths of all images before current
+      const gap = getGap();
+      let offset = 0;
+      for (let i = 0; i < current; i++) {
+        offset += imgs[i].offsetWidth + gap;
+      }
+
+      // pull back slightly to show peek of previous image
+      if (current > 0) offset -= getPeek();
+
+      track.style.transform = `translateX(${-offset}px)`;
+
+      // update dots
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+      // update buttons
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === imgs.length - 1;
+    }
+
+    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current - 1); });
+    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(current + 1); });
+    hitPrev.addEventListener('click', () => goTo(current - 1));
+    hitNext.addEventListener('click', () => goTo(current + 1));
+
+    // wait for images to load so offsetWidth is correct
+    let loaded = 0;
+    function onLoad() {
+      loaded++;
+      if (loaded === imgs.length) goTo(0);
+    }
+    imgs.forEach(img => {
+      if (img.complete && img.naturalWidth > 0) {
+        onLoad();
+      } else {
+        img.addEventListener('load', onLoad);
+        img.addEventListener('error', onLoad); // don't block on broken images
+      }
+    });
+
+    // also call immediately (handles fully cached pages)
+    goTo(0);
+  }
+
+  function initAllCarousels() {
+    document.querySelectorAll('.carousel-wrap').forEach(initCarousel);
+  }
+
+  /* ============================================================
+     Init
+     ============================================================ */
   showView('home');
+  initAllCarousels();
 </script>
 
 </body>
