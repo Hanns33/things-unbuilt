@@ -223,29 +223,112 @@
       justify-content: center;
     }
 
-    /* Expand icon — appears on hover of the image */
-    .expand-btn {
+    /* Fullscreen button — always visible, top-right of image */
+    .fs-btn {
       position: absolute;
-      bottom: 10px;
+      top: 10px;
       right: 10px;
-      width: 30px;
-      height: 30px;
-      background: rgba(245,242,237,0.88);
+      width: 32px;
+      height: 32px;
+      background: rgba(245,242,237,0.82);
       border: none;
       border-radius: 4px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s ease, background 0.15s ease;
       color: var(--color-text);
       backdrop-filter: blur(4px);
       z-index: 2;
+      font-size: 17px;
+      line-height: 1;
+      transition: background 0.15s;
     }
-    .project-img-wrap:hover .expand-btn { opacity: 1; }
-    .expand-btn:hover { background: rgba(245,242,237,1); }
-    .expand-btn svg { display: block; }
+    .fs-btn:hover { background: rgba(245,242,237,1); }
+
+    /* ============================================================
+       FULLSCREEN OVERLAY
+       ============================================================ */
+    #fs-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: #131110;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #fs-overlay.fs-open { display: flex; }
+
+    #fs-viewport {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+
+    #fs-track {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      transition: transform 0.42s cubic-bezier(0.25, 0.1, 0.25, 1);
+      will-change: transform;
+    }
+
+    /* Images in fullscreen — fixed height, natural width, contained */
+    #fs-track img {
+      flex-shrink: 0;
+      height: 86vh;
+      width: auto;
+      max-width: 90vw;
+      object-fit: contain;
+      display: block;
+      margin: 0 28px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    #fs-track img.fs-cur  { opacity: 1; }
+    #fs-track img.fs-adj  { opacity: 0.2; }
+
+    /* Close button */
+    #fs-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: rgba(245,242,237,0.45);
+      font-size: 28px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.5rem;
+      z-index: 1001;
+      transition: color 0.15s;
+    }
+    #fs-close:hover { color: rgba(245,242,237,0.9); }
+
+    /* Dots */
+    #fs-dots {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+    }
+    .fs-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(245,242,237,0.2);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .fs-dot.active { background: rgba(245,242,237,0.75); }
 
     /* ============================================================
        EXPANDED ROW
@@ -617,8 +700,7 @@
       <div class="project">
         <div class="project-img-wrap" onclick="toggleExpand('shade')">
           <img src="/images/shade/shade-5.jpg" alt="Shade">
-          <button class="expand-btn" aria-label="Expand project">
-          </button>
+          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
         </div>
         <div class="project-body">
           <p class="project-number">1032</p>
@@ -662,6 +744,7 @@
       <div class="project">
         <div class="project-img-wrap" onclick="toggleExpand('kitchen')">
           <img src="/images/kitchen-led/led-kitchen-1.jpg" alt="Kitchen Light">
+          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
         </div>
         <div class="project-body">
           <p class="project-number">1043</p>
@@ -701,9 +784,7 @@
       <div class="project">
         <div class="project-img-wrap" onclick="toggleExpand('campari')">
           <img src="/images/campari/campari-6.jpg" alt="Campari Light">
-          <button class="expand-btn" aria-label="Expand project">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
         </div>
         <div class="project-body">
           <p class="project-number">1019</p>
@@ -740,9 +821,7 @@
       <div class="project">
         <div class="project-img-wrap" onclick="toggleExpand('table')">
           <img src="/images/table/red-table.jpg" alt="Red Table">
-          <button class="expand-btn" aria-label="Expand project">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
         </div>
         <div class="project-body">
           <p class="project-number">1031</p>
@@ -779,9 +858,7 @@
       <div class="project">
         <div class="project-img-wrap" onclick="toggleExpand('bar')">
           <img src="/images/bar/bar.jpg" alt="Bar">
-          <button class="expand-btn" aria-label="Expand project">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
         </div>
         <div class="project-body">
           <p class="project-number">1008</p>
@@ -818,9 +895,7 @@
       <div class="project">
         <div class="project-img-wrap" onclick="toggleExpand('candle')">
           <img src="/images/candle/candle.jpg" alt="Candle Holder">
-          <button class="expand-btn" aria-label="Expand project">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
+          <button class="fs-btn" aria-label="Fullscreen" onclick="openFS(event, this)">&#x26F6;</button>
         </div>
         <div class="project-body">
           <p class="project-number">1027</p>
@@ -1057,6 +1132,15 @@
 </div><!-- /page -->
 
 
+<!-- Fullscreen overlay -->
+<div id="fs-overlay">
+  <button id="fs-close">&#x2715;</button>
+  <div id="fs-viewport">
+    <div id="fs-track"></div>
+  </div>
+  <div id="fs-dots"></div>
+</div>
+
 <script>
   /* ============================================================
      Routing
@@ -1099,14 +1183,11 @@
 
   /* ============================================================
      Expanded row carousels
-     Each project's expanded section is its own small carousel.
-     State is stored in the `carousels` map keyed by project id.
      ============================================================ */
-  const carousels = {}; /* id → { current, slides, dots, prevBtn, nextBtn } */
+  const carousels = {};
 
   function initExpandCarousel(id) {
-    if (carousels[id]) return; /* already initialised */
-
+    if (carousels[id]) return;
     const expanded = document.getElementById('expand-' + id);
     if (!expanded) return;
 
@@ -1116,7 +1197,6 @@
     const prevBtn = expanded.querySelector('.exp-prev');
     const nextBtn = expanded.querySelector('.exp-next');
 
-    /* build dots */
     slides.forEach((_, i) => {
       const dot = document.createElement('button');
       dot.className = 'exp-dot' + (i === 0 ? ' active' : '');
@@ -1131,89 +1211,52 @@
   function expLayout(id, animate) {
     const c = carousels[id];
     if (!c) return;
-
-    const container = c.track.parentElement; /* .exp-inner */
-    const containerW = container.offsetWidth;
+    const containerW = c.track.parentElement.offsetWidth;
     const gap = 16;
-
-    /* sum widths of slides before current */
     let offset = 0;
-    for (let i = 0; i < c.current; i++) {
-      offset += c.slides[i].offsetWidth + gap;
-    }
-
-    /* center the current slide */
-    const currentW = c.slides[c.current].offsetWidth;
-    const center = (containerW - currentW) / 2;
-
+    for (let i = 0; i < c.current; i++) offset += c.slides[i].offsetWidth + gap;
+    const center = (containerW - c.slides[c.current].offsetWidth) / 2;
     if (!animate) c.track.style.transition = 'none';
     c.track.style.transform = `translateX(${center - offset}px)`;
-    if (!animate) {
-      c.track.offsetHeight; /* force reflow */
-      c.track.style.transition = '';
-    }
+    if (!animate) { c.track.offsetHeight; c.track.style.transition = ''; }
   }
 
   function expGoTo(id, index, animate = true) {
     const c = carousels[id];
     if (!c) return;
-
     c.current = Math.max(0, Math.min(index, c.slides.length - 1));
-
-    /* opacity: current slide full, others dimmed */
-    c.slides.forEach((s, i) => {
-      s.style.opacity = i === c.current ? '1' : '0.25';
-    });
-
-    /* dots */
-    const dots = c.dotsEl.querySelectorAll('.exp-dot');
-    dots.forEach((d, i) => d.classList.toggle('active', i === c.current));
-
-    /* buttons */
+    c.slides.forEach((s, i) => { s.style.opacity = i === c.current ? '1' : '0.25'; });
+    c.dotsEl.querySelectorAll('.exp-dot').forEach((d, i) => d.classList.toggle('active', i === c.current));
     c.prevBtn.disabled = c.current === 0;
     c.nextBtn.disabled = c.current === c.slides.length - 1;
-
-    /* layout — wait for images if needed */
-    const currentImg = c.slides[c.current].querySelector('img');
-    if (!currentImg || currentImg.offsetWidth > 0) {
-      expLayout(id, animate);
-    } else {
-      currentImg.addEventListener('load', () => expLayout(id, animate), { once: true });
-    }
+    const img = c.slides[c.current].querySelector('img');
+    if (!img || img.offsetWidth > 0) expLayout(id, animate);
+    else img.addEventListener('load', () => expLayout(id, animate), { once: true });
   }
 
-  /* Called by inline onclick on nav buttons */
   function expGo(id, dir) {
     const c = carousels[id];
     if (c) expGoTo(id, c.current + dir);
   }
 
   /* ============================================================
-     Expand / collapse
+     Expand / collapse row
      ============================================================ */
   let openId = null;
 
   function toggleExpand(id) {
     if (openId === id) { closeExpand(id); return; }
-    if (openId)         closeExpand(openId);
+    if (openId) closeExpand(openId);
     openExpand(id);
   }
 
   function openExpand(id) {
     const el = document.getElementById('expand-' + id);
     if (!el) return;
-
     initExpandCarousel(id);
-
     el.classList.add('open');
     openId = id;
-
-    /* scroll so the expanded row is visible */
-    setTimeout(() => {
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 80);
-
-    /* re-layout after transition (max-height may change widths) */
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
     setTimeout(() => expLayout(id, false), 500);
   }
 
@@ -1223,9 +1266,162 @@
     if (openId === id) openId = null;
   }
 
-  /* Reflow on resize */
+  window.addEventListener('resize', () => { if (openId) expLayout(openId, false); });
+
+  /* ============================================================
+     FULLSCREEN — infinite looping carousel
+     ============================================================ */
+  const FS_GAP   = 56;   /* px between images in fullscreen */
+  let fsCurrent  = 1;    /* index in allSlides (1 = first real image) */
+  let fsSlides   = [];   /* all img elements including clones */
+  let fsTotal    = 0;    /* number of real images */
+  let fsJumping  = false;
+
+  const fsOverlay  = document.getElementById('fs-overlay');
+  const fsViewport = document.getElementById('fs-viewport');
+  const fsTrack    = document.getElementById('fs-track');
+  const fsDots     = document.getElementById('fs-dots');
+  const fsCloseBtn = document.getElementById('fs-close');
+
+  /* Collect image src/alt from a project's expanded slides (skip text slides) */
+  function getProjectImages(projectId) {
+    const expanded = document.getElementById('expand-' + projectId);
+    if (!expanded) return [];
+    return Array.from(expanded.querySelectorAll('.exp-slide:not(.exp-text-slide) img'))
+      .map(img => ({ src: img.src, alt: img.alt }));
+  }
+
+  /* ⛶ button click — figure out which project from the button's context */
+  function openFS(event, btn) {
+    event.stopPropagation(); /* don't trigger toggleExpand on the wrap */
+    const wrap = btn.closest('.project-img-wrap');
+    const project = wrap.closest('.project');
+    /* find the project id from the expanded section that follows */
+    const expanded = project.nextElementSibling;
+    const id = expanded && expanded.id ? expanded.id.replace('expand-', '') : null;
+    if (!id) return;
+    const images = getProjectImages(id);
+    if (images.length === 0) return;
+    fsOpen(images, 0);
+  }
+
+  function fsOpen(images, startIndex) {
+    fsTotal   = images.length;
+    fsSlides  = [];
+    fsCurrent = 1;
+
+    /* Clear track and dots */
+    fsTrack.innerHTML = '';
+    fsDots.innerHTML  = '';
+
+    /* Build: [lastClone, img0…imgN-1, firstClone] */
+    const srcs = images.map(i => i);
+    const allSrcs = [srcs[srcs.length - 1], ...srcs, srcs[0]];
+
+    allSrcs.forEach(({ src, alt }) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = alt || '';
+      fsTrack.appendChild(img);
+      fsSlides.push(img);
+    });
+
+    /* Dots for real images only */
+    srcs.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'fs-dot';
+      dot.addEventListener('click', (e) => { e.stopPropagation(); fsGoTo(i + 1); });
+      fsDots.appendChild(dot);
+    });
+
+    fsOverlay.classList.add('fs-open');
+    document.body.style.overflow = 'hidden';
+
+    /* Start at correct real image */
+    const targetIndex = startIndex + 1; /* +1 for lastClone offset */
+    requestAnimationFrame(() => fsGoTo(targetIndex, false));
+  }
+
+  function fsLayout(animate) {
+    const vw = fsViewport.offsetWidth;
+    let offsetToCurrent = 0;
+    for (let i = 0; i < fsCurrent; i++) {
+      offsetToCurrent += fsSlides[i].offsetWidth + FS_GAP;
+    }
+    const currentW = fsSlides[fsCurrent].offsetWidth;
+    const center   = (vw - currentW) / 2;
+
+    if (!animate) fsTrack.style.transition = 'none';
+    fsTrack.style.transform = `translateX(${center - offsetToCurrent}px)`;
+    if (!animate) { fsTrack.offsetHeight; fsTrack.style.transition = ''; }
+  }
+
+  function fsUpdateOpacity() {
+    fsSlides.forEach((img, i) => {
+      img.classList.remove('fs-cur', 'fs-adj');
+      if (i === fsCurrent)             img.classList.add('fs-cur');
+      else if (Math.abs(i - fsCurrent) === 1) img.classList.add('fs-adj');
+    });
+  }
+
+  function fsUpdateDots() {
+    let real = fsCurrent - 1;
+    if (fsCurrent === 0)           real = fsTotal - 1;
+    if (fsCurrent === fsTotal + 1) real = 0;
+    fsDots.querySelectorAll('.fs-dot').forEach((d, i) => d.classList.toggle('active', i === real));
+  }
+
+  function fsGoTo(index, animate = true) {
+    fsCurrent = index;
+    const el = fsSlides[fsCurrent];
+    if (!el) return;
+
+    fsUpdateOpacity();
+    fsUpdateDots();
+
+    if (el.offsetWidth > 0) {
+      fsLayout(animate);
+    } else {
+      el.addEventListener('load', () => fsLayout(animate), { once: true });
+    }
+  }
+
+  /* After sliding to a clone → silently jump to the real image */
+  fsTrack.addEventListener('transitionend', () => {
+    if (fsJumping) return;
+    if (fsCurrent === 0) {
+      fsJumping = true;
+      fsGoTo(fsTotal, false);
+      fsJumping = false;
+    } else if (fsCurrent === fsTotal + 1) {
+      fsJumping = true;
+      fsGoTo(1, false);
+      fsJumping = false;
+    }
+  });
+
+  /* Click left/right half of viewport */
+  fsViewport.addEventListener('click', (e) => {
+    if (e.clientX < window.innerWidth / 2) fsGoTo(fsCurrent - 1);
+    else                                    fsGoTo(fsCurrent + 1);
+  });
+
+  function fsClose() {
+    fsOverlay.classList.remove('fs-open');
+    document.body.style.overflow = '';
+  }
+
+  fsCloseBtn.addEventListener('click', fsClose);
+
+  document.addEventListener('keydown', (e) => {
+    if (!fsOverlay.classList.contains('fs-open')) return;
+    if (e.key === 'Escape')      fsClose();
+    if (e.key === 'ArrowRight')  fsGoTo(fsCurrent + 1);
+    if (e.key === 'ArrowLeft')   fsGoTo(fsCurrent - 1);
+  });
+
   window.addEventListener('resize', () => {
-    if (openId) expLayout(openId, false);
+    if (fsOverlay.classList.contains('fs-open')) fsLayout(false);
   });
 
   /* ============================================================
