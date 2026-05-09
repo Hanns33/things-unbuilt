@@ -929,7 +929,11 @@
 
     function layout() {
       /* How far is the wrap's left edge from the viewport left? */
-      const wrapLeft = wrap.getBoundingClientRect().left;
+      const wrapLeft  = wrap.getBoundingClientRect().left;
+      const wrapWidth = wrap.offsetWidth;
+
+      /* Cap very wide (horizontal) images to the column width */
+      imgs.forEach(img => { img.style.maxWidth = wrapWidth + 'px'; });
 
       /* Stretch carousel to full viewport width, anchored at viewport left */
       carousel.style.left  = -wrapLeft + 'px';
