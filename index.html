@@ -716,6 +716,51 @@
 
     <div class="project-list">
 
+      <!-- ── FIELD OF VIEW ─────────────────────────────────────────────── -->
+      <div class="project">
+        <div class="project-img-wrap" onclick="openFS(event, this, 'shade')">
+          <img src="/images/field-of-view/fov-1.jpeg" alt="Field of View">
+          <button class="expand-btn" aria-label="Expand project">
+          </button>
+        </div>
+        <div class="project-body">
+          <p class="project-number">1044</p>
+          <h2 class="project-title"><strong>Field of View</strong></h2>
+          <p class="project-note">How do you design an exhibition for a train station?</p>
+          <p class="project-for">for Katie Edwards, 2026</p>
+        </div>
+      </div>
+
+      <div class="project-expanded" id="expand-shade">
+        <div class="exp-inner">
+          <button class="exp-close" onclick="closeExpand('shade')">&#x2715;</button>
+          <div class="exp-track">
+            <div class="exp-slide"><img src="/images/field-of-view/fov-1.jpeg" alt="Field of View"></div>
+            <div class="exp-slide"><img src="/images/field-of-view/fov-2.jpeg" alt="Field of View"></div>
+            <div class="exp-slide"><img src="/images/field-of-view/fov-3.jpeg" alt="Field of View"></div>
+            <div class="exp-slide"><img src="/images/field-of-view/fov-4.jpeg" alt="Field of View"></div>
+            <div class="exp-slide"><img src="/images/field-of-view/fov-detail-1.jpeg" alt="Field of View Detail"></div>
+            <div class="exp-slide"><img src="/images/field-of-view/fov-detail-2.jpeg" alt="Field of View Detail"></div>
+            <div class="exp-slide"><img src="/images/field-of-view/fov-detail-3jpeg" alt="Field of View Detail"></div>
+
+            <!-- text slide — edit the content below -->
+            <div class="exp-slide exp-text-slide">
+              <div class="exp-text-body">
+                <p class="exp-label">about</p>
+                <p>A shade structure for a private parking lot. The brief was simple: keep the rain off, but make it feel considered.</p>
+                <p class="exp-label">materials</p>
+                <p>powder-coated steel, polycarbonate panels</p>
+                <p class="exp-label">made for</p>
+                <p>Alissa & Alexej, 2025</p>
+              </div>
+            </div>
+          </div>
+          <button class="exp-nav exp-prev" onclick="expGo('shade',-1)">&#8249;</button>
+          <button class="exp-nav exp-next" onclick="expGo('shade', 1)">&#8250;</button>
+          <div class="exp-dots" id="dots-shade"></div>
+        </div>
+      </div>
+
       <!-- ── SHADE ─────────────────────────────────────────────── -->
       <div class="project">
         <div class="project-img-wrap" onclick="openFS(event, this, 'shade')">
