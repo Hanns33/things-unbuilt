@@ -805,6 +805,55 @@
         </div>
       </div>
 
+      <!-- ── the simple bike ─────────────────────────────────────────────── -->
+      <div class="project">
+        <div class="project-img-wrap" onclick="openFS(event, this, 'the simple bike project')">
+          <img src="/images/the simple bike/rendering_explosion.jpg" alt="the-simple-bike">
+          <button class="expand-btn" aria-label="Expand project">
+          </button>
+        </div>
+        <div class="project-body">
+          <p class="project-number">1000</p>
+          <h2 class="project-title"><strong>the-simple-bike</strong></h2>
+          <p class="project-note">How do you design a bike that is easy to fix?</p>
+          <p class="project-for">master's thesis, 2024</p>
+        </div>
+      </div>
+
+      <div class="project-expanded" id="expand-the-simple-bike">
+        <div class="exp-inner">
+          <button class="exp-close" onclick="closeExpand('the-simple-bike')">&#x2715;</button>
+          <div class="exp-track">
+            <div class="exp-slide"><img src="/images/the simple bike/concept.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/frame-prototype.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/frame-prototype-1.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/final-prototype.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/test-ride-fail.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/test-ride.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/rendering-front.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/rendering-parts.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/rendering_explosion.jpg" alt="the-simple-bike"></div>
+            <div class="exp-slide"><img src="/images/the simple bike/exhibition.jpg" alt="the-simple-bike"></div>
+
+
+            <!-- text slide — edit the content below -->
+            <div class="exp-slide exp-text-slide">
+              <div class="exp-text-body">
+                <p class="exp-label">about</p>
+                <p>this project is my master‘s thesis and presents a blueprint for the basic version of a wooden bicycle, designed to enhance accessibility and repairability..</p>
+                <p class="exp-label">materials</p>
+                <p>different bike parts, solid douglas fir</p>
+                <p class="exp-label">made for</p>
+                <p>Lund University, Sweden 2026</p>
+              </div>
+            </div>
+          </div>
+          <button class="exp-nav exp-prev" onclick="expGo('the-simple-bike',-1)">&#8249;</button>
+          <button class="exp-nav exp-next" onclick="expGo('the-simple-bike', 1)">&#8250;</button>
+          <div class="exp-dots" id="dots-the-simple-bike"></div>
+        </div>
+      </div>
+
       <!-- ── KITCHEN LIGHT ──────────────────────────────────────── -->
       <div class="project">
         <div class="project-img-wrap" onclick="openFS(event, this, 'kitchen')">
