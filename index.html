@@ -1456,6 +1456,28 @@
      Init
      ============================================================ */
   showView('home');
+
+    /* ============================================================
+     IMAGE FALLBACK
+     ============================================================ */
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('error', function handleImageError() {
+      const src = this.getAttribute('src');
+
+      if (!src || !src.toLowerCase().endsWith('.webp')) return;
+
+      const step = parseInt(this.dataset.fallbackStep || '0', 10);
+
+      if (step === 0) {
+        this.dataset.fallbackStep = '1';
+        this.src = src.replace(/\.webp$/i, '.jpg.webp');
+      } else if (step === 1) {
+        this.dataset.fallbackStep = '2';
+        this.src = src.replace(/\.webp$/i, '.jpg');
+      }
+    });
+  });
+  
 </script>
 
 </body>
