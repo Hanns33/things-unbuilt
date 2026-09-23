@@ -1,0 +1,12 @@
+# Keep full-resolution originals in the repo, but don't deploy them.
+# The page only loads the .webp versions.
+images-backup/
+node_modules/
+.astro/
+images/**/*.jpg
+images/**/*.jpeg
+images/**/*.JPG
+images/**/*.png
+images/public/
+*.psd
+.DS_Store
