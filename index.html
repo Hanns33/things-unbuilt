@@ -4,1480 +4,575 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Things Unbuilt</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap" rel="stylesheet">
+  <meta name="description" content="Prototypes, and other things unbuilt.">
+  <link rel="canonical" href="https://thingsunbuilt.com/">
+  <meta property="og:title" content="Things Unbuilt">
+  <meta property="og:description" content="Prototypes, and other things unbuilt.">
+  <meta property="og:image" content="https://thingsunbuilt.com/images/field-of-view/fov-1.webp">
   <style>
 
     /* ============================================================
-       CUSTOMIZE HERE — tweak these variables to adjust the whole site
+       CUSTOMIZE HERE
        ============================================================ */
     :root {
-      /* Fonts */
-      --font-display: 'Roboto Flex', sans-serif;        /* headings, project titles */
-      --font-body:    'Open Sans', sans-serif;                 /* nav, body text, labels */
-
-      /* Font sizes */
-      --size-nav:       14px;
-      --size-label:     12px;     /* small caps labels */
-      --size-body:      14px;     /* paragraph text */
-      --size-note:      13px;     /* secondary/caption text */
-      --size-h1:        48px;     /* page title */
-      --size-h2:        30px;     /* project title */
-
-      /* Spacing */
-      --space-page-x:   6vw;      /* horizontal page padding */
-      --space-page-top: 2.5rem;   /* top padding */
-      --space-nav-gap:  2.5rem;   /* gap between nav items */
-      --space-section:  4rem;     /* gap between major sections */
-      --space-project:  3rem;     /* gap between project rows */
-      --space-img-gap:  2.5rem;   /* gap between image and text */
-
-      /* Image */
-      --img-width:      80%;      /* width of project image column */
-      --img-ratio:      5 / 3;    /* aspect ratio of project images */
-      --img-radius:     4px;      /* corner radius on images */
-      --expanded-height: 420px;   /* height of slides in the expanded row */
-
-      /* Randoms grid */
-      --grid-cols:      4;        /* columns in randoms grid (use integer) */
-      --grid-gap:       4px;      /* gap between grid squares */
+      /* One typeface, two sizes, two weights (400 / 700) */
+      --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --small:  14px;   /* everything */
+      --large:  24px;   /* homepage line, project titles */
 
       /* Colors */
-      --color-bg:       #f5f2ed;
-      --color-text:     #1a1816;
-      --color-muted:    #575351;
-      --color-faint:    #2d3e9e;
-      --color-accent:   #8a6a3a;  /* used for hover links, tag active state */
-      --color-tag-bg:   #ece8e2;
-      --color-divider:  #d8d0c8;
+      --bg:     #f3efe8;
+      --ink:    #191714;
+      --muted:  #77716a;
+      --tint:   #e7e1d7;   /* image placeholders */
 
-      /* Transition */
-      --transition:     0.15s ease;
+      /* Layout */
+      --max:    1320px;
+      --gutter: clamp(1rem, 4vw, 3.5rem);
+      --gap:    clamp(.75rem, 1.4vw, 1.25rem);   /* gap between images */
     }
 
     /* ============================================================
-       BASE RESET
+       BASE
        ============================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: var(--font-body);
-      background: var(--color-bg);
-      color: var(--color-text);
-      font-size: var(--size-body);
-      line-height: 1.75;
+      font-family: var(--font);
+      font-size: var(--small);
+      line-height: 1.45;
+      background: var(--bg);
+      color: var(--ink);
       -webkit-font-smoothing: antialiased;
     }
 
     a { color: inherit; text-decoration: none; }
-    img { display: block; width: 100%; }
+    img { display: block; max-width: 100%; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    h1, h2 { font-size: inherit; font-weight: inherit; }
+    b { font-weight: 700; }
+    :focus-visible { outline: 1px solid var(--ink); outline-offset: 3px; }
 
-    /* ============================================================
-       PAGE WRAPPER
-       ============================================================ */
-    .page {
-      max-width: 1000px;
+    .large { font-size: var(--large); line-height: 1.2; }
+    .muted { color: var(--muted); }
+
+    .wrap {
+      max-width: var(--max);
       margin: 0 auto;
-      padding: var(--space-page-top) var(--space-page-x) 5rem;
+      padding: 0 var(--gutter);
     }
 
     /* ============================================================
        NAV
        ============================================================ */
-    nav {
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg);
+    }
+
+    .site-nav .wrap {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: var(--space-section);
+      justify-content: space-between;
+      height: 60px;
     }
 
-    .nav-logo img {
-      height: 28px;         /* ← adjust logo height here */
-      width: auto;
-      display: block;
-    }
+    .nav-logo img { height: 20px; width: auto; }
 
-    /* fallback if no logo image yet */
-    .nav-logo-text {
-      font-family: var(--font-body);
-      font-size: var(--size-nav);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: lowercase;
-      color: var(--color-text);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: var(--space-nav-gap);
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: var(--size-nav);
-      color: var(--color-muted);
-      transition: color var(--transition);
-    }
-
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { color: var(--muted); }
     .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--color-text);
-    }
+    .nav-links a[aria-current] { color: var(--ink); }
 
     /* ============================================================
-       PAGE VISIBILITY (simple JS-driven routing)
+       VIEWS
        ============================================================ */
-    .view { display: none; }
+    .view { display: none; padding-bottom: 6rem; }
     .view.active { display: block; }
 
     /* ============================================================
-       HOME — intro block
+       HOME
        ============================================================ */
-    .intro {
-      max-width: 680px;
-      margin-bottom: var(--space-section);
-    }
+    .home-line { padding: 3rem 0 2.5rem; }
 
-    .intro-headline {
-      font-family: var(--font-display);
-      font-size: var(--size-h1);
-      font-weight: 400;
-      line-height: 1.3;
-      color: var(--color-text);
-      margin-bottom: 1rem;
-    }
-
-    .intro-body {
-      font-size: var(--size-body);
-      color: var(--color-muted);
-      line-height: 1.8;
-    }
-
-    .intro-body em {
-      font-style: italic;
-      color: var(--color-text);
-    }
-
-    /* ============================================================
-       DIVIDER
-       ============================================================ */
-    .divider {
-      border: none;
-      border-top: 1px dashed var(--color-divider);
-      margin: var(--space-section) 0;
-    }
-
-    /* ============================================================
-       SECTION LABEL
-       ============================================================ */
-    .section-label {
-      font-size: var(--size-label);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-faint);
-      margin-bottom: 2rem;
-    }
-
-    /* ============================================================
-       PROJECT ROW  (image left, text right — always)
-       ============================================================ */
-    .project-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-project);
-    }
-
-    .project {
-      display: flex;
-      gap: var(--space-img-gap);
-      align-items: flex-start;
-    }
-
-    .project-img-wrap {
-      flex: 0 0 var(--img-width);
-      cursor: pointer;
-      overflow: hidden;
-      border-radius: var(--img-radius);
-      background: var(--color-tag-bg);
-      position: relative; /* for the expand button */
-    }
-
-    .project-img-wrap img,
-    .project-img-placeholder {
-      width: 100%;
-      aspect-ratio: var(--img-ratio);
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    .project-img-wrap:hover img,
-    .project-img-wrap:hover .project-img-placeholder {
-      transform: scale(1.02);
-    }
-
-    /* placeholder SVG — remove once you have real photos */
-    .project-img-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Expand icon — appears on hover of the image */
-    .expand-btn {
-      display: none; /* replaced by fs-btn */
-    }
-
-    /* Fullscreen button — subtle, always visible, top-right */
-    .fs-btn {
-      position: absolute;
-      top: 8px;
-      right: 10px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      color: rgba(255,255,255,0.55);
-      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-      z-index: 2;
-      padding: 4px 5px;
-      line-height: 1;
-      transition: color 0.15s;
-    }
-    .fs-btn:hover { color: rgba(255,255,255,0.95); }
-
-    .project-expanded {
-      display: none; /* data source only — content shown in fullscreen */
-    }
-
-    .exp-inner {
-      padding: 2rem 0 2.5rem;
-      border-top: 1px dashed var(--color-divider);
-      position: relative;
-      overflow: hidden; /* clips the scrolling track */
-    }
-
-    /* The scrolling track of slides */
-    .exp-track {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      transition: transform 0.42s cubic-bezier(0.25, 0.1, 0.25, 1);
-      will-change: transform;
-    }
-
-    /* Each slide — image or text */
-    .exp-slide {
-      flex-shrink: 0;
-      height: var(--expanded-height);
-      border-radius: var(--img-radius);
-      overflow: hidden;
-    }
-
-    .exp-slide img {
-      height: 100%;
-      width: auto;
-      max-width: 100%;
-      display: block;
-      object-fit: cover;
-    }
-
-    /* Text slide — same height, styled as a card */
-    .exp-slide.exp-text-slide {
-      background: var(--color-tag-bg);
-      width: 320px;  /* fixed width for text card */
-      display: flex;
-      align-items: flex-start;
-      padding: 2rem 2rem;
-    }
-
-    .exp-text-slide .exp-text-body {
-      font-size: var(--size-body);
-      line-height: 1.75;
-    }
-
-    .exp-text-slide .exp-text-body p {
-      color: var(--color-muted);
-      margin-bottom: 1rem;
-    }
-
-    .exp-text-slide .exp-text-body p:last-child { margin-bottom: 0; }
-
-    .exp-text-slide .exp-label {
-      font-size: var(--size-label);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-faint);
-      margin-bottom: 0.3rem;
-      margin-top: 1.25rem;
-    }
-
-    .exp-text-slide .exp-label:first-child { margin-top: 0; }
-
-    /* Prev / next buttons */
-    .exp-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--color-bg);
-      border: 1px solid var(--color-divider);
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--color-text);
-      transition: background 0.15s, opacity 0.15s;
-      z-index: 3;
-      padding: 0;
-    }
-    .exp-nav:hover { background: var(--color-tag-bg); }
-    .exp-nav:disabled { opacity: 0.25; pointer-events: none; }
-    .exp-prev { left: 0; }
-    .exp-next { right: 0; }
-
-    /* Dots */
-    .exp-dots {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      margin-top: 1.25rem;
-    }
-
-    .exp-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--color-divider);
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .exp-dot.active { background: var(--color-text); }
-
-    /* Close button — top right of expanded row */
-    .exp-close {
-      position: absolute;
-      top: 1rem;
-      right: 0;
-      background: none;
-      border: none;
-      font-size: 18px;
-      color: var(--color-faint);
-      cursor: pointer;
-      padding: 0.25rem;
-      line-height: 1;
-      transition: color 0.15s;
-    }
-    .exp-close:hover { color: var(--color-text); }
-
-    .project-body {
-      flex: 1;
-      padding-top: 0.25rem;
-    }
-
-    .project-number {
-      font-size: var(--size-label);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-faint);
-      margin-bottom: 0.4rem;
-    }
-
-    .project-title {
-      font-family: var(--font-display);
-      font-size: var(--size-h2);
-      font-weight: 400;
-      color: var(--color-text);
-      margin-bottom: 0.6rem;
-      line-height: 1.2;
-    }
-
-    .project-note {
-      font-size: var(--size-body);
-      color: var(--color-muted);
-      line-height: 1.75;
-      margin-bottom: 0.75rem;
-    }
-
-    .project-for {
-      font-size: var(--size-note);
-      color: var(--color-faint);
-      font-style: italic;
-    }
-
-    .project-link {
-      display: inline-block;
-      margin-top: 1rem;
-      font-size: var(--size-note);
-      color: var(--color-muted);
-      border-bottom: 1px solid var(--color-divider);
-      padding-bottom: 1px;
-      transition: color var(--transition), border-color var(--transition);
-    }
-
-    .project-link:hover {
-      color: var(--color-accent);
-      border-color: var(--color-accent);
-    }
-
-    /* ============================================================
-       FOOTER (on home page)
-       ============================================================ */
-    .footer-block {
-      display: flex;
-      gap: 3rem;
-      margin-top: var(--space-section);
-    }
-
-    .footer-col { flex: 1; }
-
-    .footer-label {
-      font-size: var(--size-label);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-faint);
-      margin-bottom: 0.6rem;
-    }
-
-    .footer-text {
-      font-size: var(--size-note);
-      color: var(--color-muted);
-      line-height: 1.8;
-    }
-
-    .footer-text a {
-      color: var(--color-text);
-      border-bottom: 1px solid var(--color-divider);
-      transition: border-color var(--transition);
-    }
-
-    .footer-text a:hover { border-color: var(--color-accent); }
-
-    /* ============================================================
-       RANDOMS PAGE — filter + grid
-       ============================================================ */
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 2rem;
-    }
-
-    .filter-btn {
-      font-family: var(--font-body);
-      font-size: var(--size-note);
-      color: var(--color-muted);
-      background: var(--color-tag-bg);
-      border: 1px solid transparent;
-      border-radius: 20px;
-      padding: 5px 14px;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-
-    .filter-btn:hover {
-      color: var(--color-text);
-    }
-
-    .filter-btn.active {
-      background: var(--color-text);
-      color: var(--color-bg);
-    }
-
-    .randoms-grid {
+    /* Two lanes; each card goes into the shorter one (see script) */
+    .grid {
       display: grid;
-      grid-template-columns: repeat(var(--grid-cols), 1fr);
-      gap: var(--grid-gap);
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-auto-rows: 4px;
+      column-gap: var(--gap);
+      align-items: start;
     }
 
-    .random-item {
-      aspect-ratio: 1 / 1;
-      background: var(--color-tag-bg);
+    .card { display: block; padding-bottom: calc(var(--gap) * 1.5); }
+
+    .card-media { background: var(--tint); }
+    .card-media img { width: 100%; height: auto; }
+
+    .cap {
+      margin-top: .4rem;
+      white-space: nowrap;
       overflow: hidden;
-      cursor: pointer;
+      text-overflow: ellipsis;
+    }
+    .cap span { color: var(--muted); margin-left: .4em; }
+    .card:hover .cap span { color: var(--ink); }
+
+    /* ============================================================
+       PROJECT PAGE
+       ============================================================ */
+    .p-head {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gap);
+      row-gap: 1.5rem;
+      padding: 3rem 0 2.5rem;
+    }
+
+    .p-head > :first-child { grid-column: 1 / span 7; }
+    .p-head > :last-child  { grid-column: 8 / span 5; }
+
+    .p-q { margin-top: .5rem; max-width: 32ch; }
+
+    .p-about { max-width: 52ch; }
+
+    .p-facts {
+      display: grid;
+      grid-template-columns: 6.5rem 1fr;
+      gap: .15rem 1rem;
+      margin-top: 1rem;
+    }
+    .p-facts dt { color: var(--muted); }
+    .p-facts a { text-decoration: underline; text-underline-offset: 2px; }
+
+    /* landscape images full width, portrait ones in pairs */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--gap);
+    }
+
+    .gallery figure { grid-column: span 2; background: var(--tint); cursor: zoom-in; }
+    .gallery figure.tall { grid-column: span 1; }
+    .gallery figure.tall.solo { grid-column: 1 / -1; width: calc(50% - var(--gap) / 2); justify-self: center; }
+    .gallery img { width: 100%; height: auto; }
+
+    .next {
+      display: block;
+      margin-top: 4rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--tint);
+    }
+    .next:hover b { text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ============================================================
+       ABOUT
+       ============================================================ */
+    .about {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gap);
+      row-gap: 2rem;
+      padding-top: 3rem;
+    }
+    .about > * { grid-column: span 4; }
+    .about > .large { grid-column: 1 / -1; max-width: 30em; }
+    .about p + p { margin-top: .15rem; }
+    .about a { text-decoration: underline; text-underline-offset: 2px; }
+
+    /* ============================================================
+       LIGHTBOX
+       ============================================================ */
+    body.lb-open { overflow: hidden; }
+
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--bg);
+      display: none;
+      grid-template-rows: 60px 1fr 60px;
+    }
+    #lightbox.open { display: grid; }
+
+    .lb-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 var(--gutter);
+    }
+    .lb-bar button { color: var(--muted); }
+    .lb-bar button:hover { color: var(--ink); }
+
+    .lb-stage {
       position: relative;
-    }
-
-    .random-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-
-    .random-item:hover img { transform: scale(1.04); }
-
-    /* label that appears on hover */
-    .random-item-label {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(26,24,22,0.72);
-      color: #f5f2ed;
-      font-size: var(--size-note);
-      padding: 6px 10px;
-      transform: translateY(100%);
-      transition: transform 0.2s ease;
-      pointer-events: none;
-    }
-
-    .random-item:hover .random-item-label {
-      transform: translateY(0);
-    }
-
-    /* placeholder square for randoms without images */
-    .random-placeholder {
-      width: 100%;
-      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 0;
+      padding: 0 var(--gutter);
     }
+    .lb-stage img { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; }
 
-    /* hidden items when filter is active */
-    .random-item.hidden { display: none; }
+    .lb-prev, .lb-next { position: absolute; top: 0; bottom: 0; width: 50%; }
+    .lb-prev { left: 0; cursor: w-resize; }
+    .lb-next { right: 0; cursor: e-resize; }
 
     /* ============================================================
        RESPONSIVE
        ============================================================ */
-    @media (max-width: 640px) {
-      :root {
-        --img-width: 100%;
-        --grid-cols: 2;
-        --space-page-x: 1.25rem;
-      }
-
-      .project {
-        flex-direction: column;
-      }
-
-      .project-img-wrap {
-        flex: 0 0 100%;
-      }
-
-      .footer-block {
-        flex-direction: column;
-        gap: 1.5rem;
-      }
+    @media (max-width: 860px) {
+      .p-head > :first-child,
+      .p-head > :last-child,
+      .about > *,
+      .about > .large { grid-column: 1 / -1; }
     }
 
-    /* ============================================================
-       FULLSCREEN OVERLAY
-       ============================================================ */
-    body.fs-active { overflow: hidden; }
-
-    #fs-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: #111009;
-      display: none;
+    @media (max-width: 600px) {
+      :root { --large: 20px; }
+      .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      .gallery { grid-template-columns: 1fr; }
+      .gallery figure, .gallery figure.tall, .gallery figure.tall.solo { grid-column: 1 / -1; width: auto; }
+      .home-line, .p-head, .about { padding-top: 2rem; }
+      .nav-logo img { height: 17px; }
+      .nav-links { gap: 1rem; }
     }
-    #fs-overlay.fs-open { display: block; }
-
-    /* The scrolling track — each slide is exactly 100vw */
-    #fs-track {
-      display: flex;
-      height: 100vh;
-      /* transition set inline so we can disable it for instant jumps */
-    }
-
-    .fs-slide {
-      flex-shrink: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    /* Image slides */
-    .fs-slide img {
-      max-width: 88vw;
-      max-height: 88vh;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      display: block;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    /* Text / info slide */
-    .fs-slide.fs-text-slide {
-      cursor: default;
-      padding: 6vw;
-      align-items: flex-start;
-      padding-top: 12vh;
-    }
-
-    .fs-text-body {
-      max-width: 420px;
-    }
-
-    .fs-text-body p {
-      color: rgba(245,242,237,0.7);
-      font-size: var(--size-body);
-      line-height: 1.8;
-      margin-bottom: 0.75rem;
-    }
-    .fs-text-body p:last-child { margin-bottom: 0; }
-
-    .fs-text-body .exp-label {
-      font-size: var(--size-label);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: rgba(245,242,237,0.35);
-      margin-bottom: 0.25rem;
-      margin-top: 1.25rem;
-    }
-    .fs-text-body .exp-label:first-child { margin-top: 0; }
-
-    /* Close button */
-    #fs-close {
-      position: fixed;
-      top: 1.25rem;
-      right: 1.5rem;
-      background: none;
-      border: none;
-      color: rgba(245,242,237,0.35);
-      font-size: 22px;
-      cursor: pointer;
-      padding: 0.4rem;
-      z-index: 1001;
-      line-height: 1;
-      transition: color 0.15s;
-    }
-    #fs-close:hover { color: rgba(245,242,237,0.85); }
-
-    /* Dots */
-    #fs-dots {
-      position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 7px;
-      z-index: 1001;
-    }
-    .fs-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: rgba(245,242,237,0.2);
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .fs-dot.active { background: rgba(245,242,237,0.7); }
 
   </style>
 </head>
 <body>
 
-<div class="page">
-
-  <!-- ============================================================
-       NAV
-       To use your PNG logo: replace the <span> below with:
-       <img loading="lazy" src="your-logo.webp" alt="Things Unbuilt">
-       ============================================================ -->
-  <nav>
-    <a href="#" class="nav-logo" onclick="showView('home'); return false;">
-      <!-- LOGO: swap this span for an <img> once you have the PNG -->
-      <img loading="lazy" src="tt writing.webp" alt="Things Unbuilt">
-      <!-- <img loading="lazy" src="logo.webp" alt="Things Unbuilt"> -->
+<header class="site-nav">
+  <div class="wrap">
+    <a href="#/" class="nav-logo" aria-label="Things Unbuilt — home">
+      <img src="tt writing.webp" alt="Things Unbuilt">
     </a>
     <ul class="nav-links">
-      <li><a href="#" onclick="showView('randoms'); return false;" id="link-randoms">randoms</a></li>
-      <li><a href="#" onclick="showView('notes'); return false;" id="link-notes">notes</a></li>
+      <li><a href="#/" data-nav="home">index</a></li>
+      <li><a href="#/about" data-nav="about">about</a></li>
+      <li><a href="mailto:hello@thingsunbuilt.com">contact</a></li>
     </ul>
-  </nav>
+  </div>
+</header>
 
+<main class="wrap">
 
-  <!-- ============================================================
-       HOME VIEW
-       ============================================================ -->
-  <div class="view active" id="view-home">
+  <!-- HOME ------------------------------------------------------- -->
+  <section class="view" id="view-home">
+    <h1 class="home-line large">Prototypes, and other things unbuilt</h1>
+    <div class="grid" id="grid"></div>
+  </section>
 
-    <div class="intro">
-      <h1 class="intro-headline"><strong>Prototypes,</strong><br>among other things unbuilt</strong></h1>
-      <p class="intro-body">
-        A designer and an architect, making things as gifts and experiments and this is a place to share what we've been doing. If something catches your eye, say hello.
-      </p>
-    </div>
+  <!-- PROJECT ---------------------------------------------------- -->
+  <article class="view" id="view-project"></article>
 
-
-    <div class="project-list">
-
-      <!-- ── FIELD OF VIEW ─────────────────────────────────────────────── -->
-      <div class="project">
-        <div class="project-img-wrap" onclick="openFS(event, this, 'field-of-view')">
-          <img src="/images/field-of-view/fov-1.webp" alt="field-of-view">
-          <button class="expand-btn" aria-label="Expand project">
-          </button>
-        </div>
-        <div class="project-body">
-          <p class="project-number">1044</p>
-          <h2 class="project-title"><strong>Field of View</strong></h2>
-          <p class="project-note">How do you design an exhibition for a train station?</p>
-          <p class="project-for">for Katie Edwards, 2026</p>
-        </div>
-      </div>
-
-      <div class="project-expanded" id="expand-field-of-view">
-        <div class="exp-inner">
-          <button class="exp-close" onclick="closeExpand('field-of-view')">&#x2715;</button>
-          <div class="exp-track">
-            <div class="exp-slide"><img loading="lazy" src="/images/field-of-view/fov-1.webp" alt="field-of-view"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/field-of-view/fov-2.webp" alt="field-of-view"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/field-of-view/fov-3.webp" alt="field-of-view"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/field-of-view/fov-detail-1.webp" alt="field-of-view"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/field-of-view/fov-detail-2.webp" alt="field-of-view"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/field-of-view/fov-detail-3.webp" alt="field-of-view-Detail"></div>
-
-            <!-- text slide — edit the content below -->
-            <div class="exp-slide exp-text-slide">
-              <div class="exp-text-body">
-                <p class="exp-label">about</p>
-                <p>exhibition system for temporary installation. made for easy assembly.</p>
-                <p class="exp-label">materials</p>
-                <p>fire-resistent (b1) mdf, led</p>
-                <p class="exp-label">made for</p>
-                <p>Katie Edwards, 2026</p>
-              </div>
-            </div>
-          </div>
-          <button class="exp-nav exp-prev" onclick="expGo('field-of-view',-1)">&#8249;</button>
-          <button class="exp-nav exp-next" onclick="expGo('field-of-view', 1)">&#8250;</button>
-          <div class="exp-dots" id="dots-field-of-view"></div>
-        </div>
-      </div>
-
-      <!-- ── SHADE ─────────────────────────────────────────────── -->
-      <div class="project">
-        <div class="project-img-wrap" onclick="openFS(event, this, 'shade')">
-          <img src="/images/shade/shade-5.webp" alt="Shade">
-          <button class="expand-btn" aria-label="Expand project">
-          </button>
-        </div>
-        <div class="project-body">
-          <p class="project-number">1032</p>
-          <h2 class="project-title"><strong>Shade</strong></h2>
-          <p class="project-note">How do you make a shade for a parking lot?</p>
-          <p class="project-for">for Alissa & Alexej, 2025</p>
-        </div>
-      </div>
-
-      <div class="project-expanded" id="expand-shade">
-        <div class="exp-inner">
-          <button class="exp-close" onclick="closeExpand('shade')">&#x2715;</button>
-          <div class="exp-track">
-            <div class="exp-slide"><img loading="lazy" src="/images/shade/shade-5.webp" alt="Shade"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/shade/shade-2.webp" alt="Shade"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/shade/shade-1.webp" alt="Shade"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/shade/shade-detail-1.webp" alt="Shade detail"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/shade/shade-construction-1.webp" alt="Shade construction"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/shade/shade-construction-2.webp" alt="Shade construction"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/shade/shade-dark.webp" alt="Shade construction"></div>
-
-            <!-- text slide — edit the content below -->
-            <div class="exp-slide exp-text-slide">
-              <div class="exp-text-body">
-                <p class="exp-label">about</p>
-                <p>A shade structure for a private parking lot. The brief was simple: keep the rain off, but make it feel considered.</p>
-                <p class="exp-label">materials</p>
-                <p>powder-coated steel, polycarbonate panels</p>
-                <p class="exp-label">made for</p>
-                <p>Alissa & Alexej, 2025</p>
-              </div>
-            </div>
-          </div>
-          <button class="exp-nav exp-prev" onclick="expGo('shade',-1)">&#8249;</button>
-          <button class="exp-nav exp-next" onclick="expGo('shade', 1)">&#8250;</button>
-          <div class="exp-dots" id="dots-shade"></div>
-        </div>
-      </div>
-
-      <!-- ── THE SIMPLE BIKE PROJECT ─────────────────────────────────────────────── -->
-      <div class="project">
-        <div class="project-img-wrap" onclick="openFS(event, this, 'the - simple - bike')">
-          <img src="/images/the-simple-bike/explosion.webp" alt="the-simple-bike">
-          <button class="expand-btn" aria-label="Expand project">
-          </button>
-        </div>
-        <div class="project-body">
-          <p class="project-number">1000</p>
-          <h2 class="project-title"><strong>the-simple-bike</strong></h2>
-          <p class="project-note">How do you design a bike that is easy to fix?</p>
-          <p class="project-for">master's thesis, 2024</p>
-        </div>
-      </div>
-
-      <div class="project-expanded" id="expand-the-simple-bike">
-        <div class="exp-inner">
-          <button class="exp-close" onclick="closeExpand('the-simple-bike')">&#x2715;</button>
-          <div class="exp-track">
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/concept.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/frame-prototype.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/frame-prototype-1.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/final-prototype.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/test-ride-fail.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/test-ride.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/rendering-front.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/rendering-parts.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/rendering-explosion.webp" alt="the-simple-bike"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/the-simple-bike/exhibition.webp" alt="the-simple-bike"></div>
-
-
-            <!-- text slide — edit the content below -->
-            <div class="exp-slide exp-text-slide">
-              <div class="exp-text-body">
-                <p class="exp-label">about</p>
-                <p>this project is my master‘s thesis and presents a blueprint for the basic version of a wooden bicycle, designed to enhance accessibility and repairability..</p>
-                <p class="exp-label">materials</p>
-                <p>different bike parts, solid douglas fir</p>
-                <p class="exp-label">made for</p>
-                <p>Lund University, Sweden 2024</p>
-              </div>
-            </div>
-          </div>
-          <button class="exp-nav exp-prev" onclick="expGo('the-simple-bike',-1)">&#8249;</button>
-          <button class="exp-nav exp-next" onclick="expGo('the-simple-bike', 1)">&#8250;</button>
-          <div class="exp-dots" id="dots-the-simple-bike"></div>
-        </div>
-      </div>
-
-      <!-- ── KITCHEN LIGHT ──────────────────────────────────────── -->
-      <div class="project">
-        <div class="project-img-wrap" onclick="openFS(event, this, 'kitchen')">
-          <img src="/images/kitchen-led/led-kitchen-1.webp" alt="Kitchen Light">
-        </div>
-        <div class="project-body">
-          <p class="project-number">1043</p>
-          <h2 class="project-title"><strong>Kitchen Light</strong></h2>
-          <p class="project-note">How to make a sleek light for a sleek kitchen?</p>
-          <p class="project-for">for Susanne, 2026</p>
-        </div>
-      </div>
-
-      <div class="project-expanded" id="expand-kitchen">
-        <div class="exp-inner">
-          <button class="exp-close" onclick="closeExpand('kitchen')">&#x2715;</button>
-          <div class="exp-track">
-            <div class="exp-slide"><img loading="lazy" src="/images/kitchen-led/led-kitchen-1.webp" alt="Kitchen Light"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/kitchen-led/led-kitchen-2.webp" alt="Kitchen Light"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/kitchen-led/led-kitchen-3.webp" alt="Kitchen Light"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/kitchen-led/led-kitchen-4.webp" alt="Kitchen Light"></div>
-            <div class="exp-slide"><img loading="lazy" src="/images/kitchen-led/led-kitchen-5.webp" alt="Kitchen Light"></div>
-            <div class="exp-slide exp-text-slide">
-              <div class="exp-text-body">
-                <p class="exp-label">about</p>
-                <p>A custom LED strip light for a minimal kitchen. The challenge was hiding the fitting entirely.</p>
-                <p class="exp-label">materials</p>
-                <p>aluminium channel, LED strip, diffuser</p>
-                <p class="exp-label">made for</p>
-                <p>Susanne, 2026</p>
-              </div>
-            </div>
-          </div>
-          <button class="exp-nav exp-prev" onclick="expGo('kitchen',-1)">&#8249;</button>
-          <button class="exp-nav exp-next" onclick="expGo('kitchen', 1)">&#8250;</button>
-          <div class="exp-dots" id="dots-kitchen"></div>
-        </div>
-      </div>
-
-      <!-- ── CAMPARI LIGHT ──────────────────────────────────────── -->
-      <div class="project">
-        <div class="project-img-wrap" onclick="openFS(event, this, 'campari')">
-          <img src="/images/campari/campari-6.webp" alt="Campari Light">
-          <button class="expand-btn" aria-label="Expand project">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-        <div class="project-body">
-          <p class="project-number">1019</p>
-          <h2 class="project-title"><strong>Campari Light</strong></h2>
-          <p class="project-note">How to make red light not look bad?</p>
-          <p class="project-for">for Susanne, 2023</p>
-        </div>
-      </div>
-
-      <div class="project-expanded" id="expand-campari">
-        <div class="exp-inner">
-          <button class="exp-close" onclick="closeExpand('campari')">&#x2715;</button>
-          <div class="exp-track">
-            <div class="exp-slide"><img loading="lazy" src="/images/campari/campari-6.webp" alt="Campari Light"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/campari/campari-1.webp" alt="Campari Light"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/campari/campari-2.webp" alt="Campari Light"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/campari/campari-3.webp" alt="Campari Light"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/campari/campari-4.webp" alt="Campari Light"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/campari/campari-5.webp" alt="Campari Light"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/campari/campari-7.webp" alt="Campari Light"></div>
-            <div class="exp-slide exp-text-slide">
-              <div class="exp-text-body">
-                <p class="exp-label">about</p>
-                <p>A lamp using an old Campari bottle as the shade. The red glass does exactly what you'd hope.</p>
-                <p class="exp-label">materials</p>
-                <p>Campari bottle, E27 socket, oak base</p>
-                <p class="exp-label">made for</p>
-                <p>Susanne, 2023</p>
-              </div>
-            </div>
-          </div>
-          <button class="exp-nav exp-prev" onclick="expGo('campari',-1)">&#8249;</button>
-          <button class="exp-nav exp-next" onclick="expGo('campari', 1)">&#8250;</button>
-          <div class="exp-dots" id="dots-campari"></div>
-        </div>
-      </div>
-
-      <!-- ── RED TABLE ──────────────────────────────────────────── -->
-      <div class="project">
-        <div class="project-img-wrap" onclick="openFS(event, this, 'table')">
-          <img src="/images/table/red-table.webp" alt="Red Table">
-          <button class="expand-btn" aria-label="Expand project">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-        <div class="project-body">
-          <p class="project-number">1031</p>
-          <h2 class="project-title"><strong>Red Table</strong></h2>
-          <p class="project-note">How to make a bar table look cool?</p>
-          <p class="project-for">prototype, 2025</p>
-        </div>
-      </div>
-
-      <div class="project-expanded" id="expand-table">
-        <div class="exp-inner">
-          <button class="exp-close" onclick="closeExpand('table')">&#x2715;</button>
-          <div class="exp-track">
-            <div class="exp-slide"><img loading="lazy" src="/images/table/red-table.webp" alt="Red Table"></div>
-            <!-- add more: <div class="exp-slide"><img loading="lazy" src="/images/table/red-table-2.webp" alt=""></div> -->
-            <div class="exp-slide exp-text-slide">
-              <div class="exp-text-body">
-                <p class="exp-label">about</p>
-                <p>A bar-height table in lacquered red. The red was the brief — everything else followed.</p>
-                <p class="exp-label">materials</p>
-                <p>steel, lacquer</p>
-                <p class="exp-label">status</p>
-                <p>prototype, 2025</p>
-              </div>
-            </div>
-          </div>
-          <button class="exp-nav exp-prev" onclick="expGo('table',-1)">&#8249;</button>
-          <button class="exp-nav exp-next" onclick="expGo('table', 1)">&#8250;</button>
-          <div class="exp-dots" id="dots-table"></div>
-        </div>
-      </div>
-
-      <!-- ── BAR ───────────────────────────────────────────────── -->
-      <div class="project">
-        <div class="project-img-wrap" onclick="openFS(event, this, 'bar')">
-          <img src="/images/bar/bar.webp" alt="Bar">
-          <button class="expand-btn" aria-label="Expand project">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-        <div class="project-body">
-          <p class="project-number">1008</p>
-          <h2 class="project-title"><strong>Bar</strong></h2>
-          <p class="project-note">How can a bar be flexible?</p>
-          <p class="project-for">prototype, 2017</p>
-        </div>
-      </div>
-
-      <div class="project-expanded" id="expand-bar">
-        <div class="exp-inner">
-          <button class="exp-close" onclick="closeExpand('bar')">&#x2715;</button>
-          <div class="exp-track">
-            <div class="exp-slide"><img loading="lazy" src="/images/bar/bar.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-1.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-2.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-3.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-4.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-5.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-6.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-7.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-8.webp" alt="Bar"></div>
-<div class="exp-slide"><img loading="lazy" src="/images/bar/bar-9.webp" alt="Bar"></div>           
-<div class="exp-slide exp-text-slide">
-              <div class="exp-text-body">
-                <p class="exp-label">about</p>
-                <p>A modular bar unit, which opens 360° and can be reconfigured for different events and spaces.</p>
-                <p class="exp-label">materials</p>
-                <p>smoked oak veneer, orange spray paint, brass, leather</p>
-                <p class="exp-label">status</p>
-                <p>prototype, 2017</p>
-              </div>
-            </div>
-          </div>
-          <button class="exp-nav exp-prev" onclick="expGo('bar',-1)">&#8249;</button>
-          <button class="exp-nav exp-next" onclick="expGo('bar', 1)">&#8250;</button>
-          <div class="exp-dots" id="dots-bar"></div>
-        </div>
-      </div>
-
-      <!-- ── CANDLE HOLDER ─────────────────────────────────────── -->
-      <div class="project">
-        <div class="project-img-wrap" onclick="openFS(event, this, 'candle')">
-          <img src="/images/candle/candle.webp" alt="Candle Holder">
-          <button class="expand-btn" aria-label="Expand project">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 4.5V1h3.5M8.5 1H12v3.5M12 8.5V12H8.5M4.5 12H1V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-        <div class="project-body">
-          <p class="project-number">1027</p>
-          <h2 class="project-title"><strong>Candle Holder</strong></h2>
-          <p class="project-note">How can I make a quick welcome present with things at home?</p>
-          <p class="project-for">for Katie, Laura and Anna, 2024</p>
-        </div>
-      </div>
-
-      <div class="project-expanded" id="expand-candle">
-        <div class="exp-inner">
-          <button class="exp-close" onclick="closeExpand('candle')">&#x2715;</button>
-          <div class="exp-track">
-            <div class="exp-slide"><img loading="lazy" src="/images/candle/candle.webp" alt="Candle Holder"></div>
-            <!-- add more: <div class="exp-slide"><img loading="lazy" src="/images/candle/candle-2.webp" alt=""></div> -->
-            <div class="exp-slide exp-text-slide">
-              <div class="exp-text-body">
-                <p class="exp-label">about</p>
-                <p>Turned walnut base, hand-poured wax. One afternoon's work. We made twelve for a wedding.</p>
-                <p class="exp-label">materials</p>
-                <p>turned walnut, beeswax</p>
-                <p class="exp-label">made for</p>
-                <p>Katie, Laura and Anna, 2024</p>
-              </div>
-            </div>
-          </div>
-          <button class="exp-nav exp-prev" onclick="expGo('candle',-1)">&#8249;</button>
-          <button class="exp-nav exp-next" onclick="expGo('candle', 1)">&#8250;</button>
-          <div class="exp-dots" id="dots-candle"></div>
-        </div>
-      </div>
-
-    </div><!-- /project-list -->
-
-    <hr class="divider">
-
-    <div class="footer-block">
-      <div class="footer-col">
-        <p class="footer-label">who</p>
-        <p class="footer-text">one architect, one carpenter. brothers. we live in different cities and build things when we're in the same one.</p>
-      </div>
-      <div class="footer-col">
-        <p class="footer-label">say hi</p>
-        <p class="footer-text">curious about something, or just want to say hello — <a href="mailto:hello@thingsunbuilt.com">write to us</a>. we like hearing from people.</p>
-      </div>
-    </div>
-
-  </div><!-- /view-home -->
-
-
-
-  <!-- ============================================================
-       INDIVIDUAL PROJECT PAGE TEMPLATE
-       Duplicate this block for each project.
-       ============================================================ -->
-  <div class="view" id="view-project-shade">
-    <a href="#" onclick="history.back(); return false;" style="font-size:13px; color:var(--color-muted); display:inline-block; margin-bottom:2rem;">← back</a>
-
-    <p class="project-number">No. 01 — 2022</p>
-    <h2 class="project-title" style="font-size:36px; margin-bottom:1.5rem;">Shade</h2>
-
-    <!-- Main image -->
-    <div style="width:100%; margin-bottom:2rem; border-radius:var(--img-radius); overflow:hidden; background:var(--color-tag-bg);">
-      <!-- Replace with: <img loading="lazy" src="shade-main.webp" alt="Shade lamp"> -->
-      <div class="project-img-placeholder" style="aspect-ratio:16/9;">
-        <svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" style="width:100%;aspect-ratio:16/9;">
-          <rect width="800" height="450" fill="#e8e0d4"/>
-          <rect x="320" y="60" width="160" height="8" rx="3" fill="#a09080"/>
-          <rect x="260" y="68" width="280" height="220" rx="4" fill="#c8b8a8"/>
-          <rect x="276" y="84" width="248" height="198" rx="3" fill="#d8c8b8"/>
-          <ellipse cx="400" cy="288" rx="72" ry="14" fill="#90807060"/>
-          <rect x="376" y="302" width="24" height="90" rx="3" fill="#8a7a6a"/>
-          <rect x="400" y="302" width="24" height="90" rx="3" fill="#8a7a6a"/>
-          <rect x="298" y="388" width="204" height="10" rx="3" fill="#a09080"/>
-        </svg>
-      </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-bottom:3rem;">
+  <!-- ABOUT ------------------------------------------------------ -->
+  <section class="view" id="view-about">
+    <div class="about">
+      <p class="large">A designer and an architect, making things as gifts and experiments, and this is a place to share what we've been doing.</p>
       <div>
-        <p class="project-note" style="margin-bottom:1rem;">
-          A table lamp made from a single sheet of bent steel. The challenge was finding the fold angle that felt right — not too aggressive, not too soft.
-        </p>
-        <p class="project-note">
-          We spent three weekends on it. The first prototype was terrible. The second one too. The third one we kept.
-        </p>
+        <p class="muted">who</p>
+        <p>one architect, one carpenter. brothers. we live in different cities and build things when we're in the same one.</p>
       </div>
       <div>
-        <p class="footer-label">materials</p>
-        <p class="project-note" style="margin-bottom:1rem;">powder-coated steel, standard E27 fitting</p>
-        <p class="footer-label">made for</p>
-        <p class="project-note" style="margin-bottom:1rem;">a friend's new flat in Vienna</p>
-        <p class="footer-label">year</p>
-        <p class="project-note">2022</p>
+        <p class="muted">contact</p>
+        <p>curious about something, or just want to say hello — <a href="mailto:hello@thingsunbuilt.com">hello@thingsunbuilt.com</a>. we like hearing from people.</p>
       </div>
     </div>
+  </section>
 
-    <!-- Extra images row — add/remove as needed -->
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--grid-gap);">
-      <div style="background:var(--color-tag-bg); border-radius:var(--img-radius); aspect-ratio:1/1;">
-        <!-- <img loading="lazy" src="shade-detail-1.webp" alt="detail"> -->
-      </div>
-      <div style="background:var(--color-tag-bg); border-radius:var(--img-radius); aspect-ratio:1/1;">
-        <!-- <img loading="lazy" src="shade-detail-2.webp" alt="detail"> -->
-      </div>
-    </div>
-  </div><!-- /view-project-shade -->
+</main>
 
-
-  <!-- project-table page (minimal template — add content to taste) -->
-  <div class="view" id="view-project-table">
-    <a href="#" onclick="history.back(); return false;" style="font-size:13px; color:var(--color-muted); display:inline-block; margin-bottom:2rem;">← back</a>
-    <p class="project-number">No. 02 — 2021</p>
-    <h2 class="project-title" style="font-size:36px; margin-bottom:1.5rem;">Table</h2>
-    <div style="width:100%; margin-bottom:2rem; border-radius:var(--img-radius); overflow:hidden; background:var(--color-tag-bg);">
-      <div class="project-img-placeholder" style="aspect-ratio:16/9;">
-        <!-- <img loading="lazy" src="table-main.webp" alt="Table"> -->
-      </div>
-    </div>
-    <p class="project-note">Oak top, steel legs. Built for a kitchen that needed something low and long. The client was our mum.</p>
+<!-- Lightbox -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="lb-bar">
+    <span id="lb-title"></span>
+    <span id="lb-count" class="muted"></span>
+    <button id="lb-close" aria-label="Close">close</button>
   </div>
-
-
-  <!-- project-candle page -->
-  <div class="view" id="view-project-candle">
-    <a href="#" onclick="history.back(); return false;" style="font-size:13px; color:var(--color-muted); display:inline-block; margin-bottom:2rem;">← back</a>
-    <p class="project-number">No. 03 — 2023</p>
-    <h2 class="project-title" style="font-size:36px; margin-bottom:1.5rem;">Candle</h2>
-    <div style="width:100%; margin-bottom:2rem; border-radius:var(--img-radius); overflow:hidden; background:var(--color-tag-bg);">
-      <div class="project-img-placeholder" style="aspect-ratio:16/9;">
-        <!-- <img loading="lazy" src="candle-main.webp" alt="Candle"> -->
-      </div>
-    </div>
-    <p class="project-note">Turned walnut base, hand-poured wax. Took one afternoon. We made twelve of them for a wedding.</p>
+  <div class="lb-stage">
+    <img id="lb-img" alt="">
+    <button class="lb-prev" aria-label="Previous image"></button>
+    <button class="lb-next" aria-label="Next image"></button>
   </div>
-
-
-  <!-- ============================================================
-       RANDOMS VIEW
-       Each item has a data-category attribute for filtering.
-       Add as many items as you like — the grid reflows automatically.
-       ============================================================ -->
-  <div class="view" id="view-randoms">
-
-    <p class="section-label" style="margin-bottom:1.5rem;">randoms</p>
-
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="filterRandoms('all', this)">all</button>
-      <button class="filter-btn" onclick="filterRandoms('wood', this)">wood</button>
-      <button class="filter-btn" onclick="filterRandoms('sketch', this)">sketches</button>
-      <button class="filter-btn" onclick="filterRandoms('metal', this)">metal</button>
-      <button class="filter-btn" onclick="filterRandoms('other', this)">other</button>
-      <!-- Add more filter categories here as needed -->
-    </div>
-
-    <div class="randoms-grid">
-
-      <!-- Each item: set data-category to match a filter-btn -->
-      <div class="random-item" data-category="wood">
-        <!-- <img loading="lazy" src="randoms/spoon.webp" alt="wooden spoon"> -->
-        <div class="random-placeholder" style="background:#d8cfc4;"></div>
-        <span class="random-item-label">wooden spoon</span>
-      </div>
-
-      <div class="random-item" data-category="sketch">
-        <div class="random-placeholder" style="background:#e4dcd0;"></div>
-        <span class="random-item-label">sketch no. 12</span>
-      </div>
-
-      <div class="random-item" data-category="wood">
-        <div class="random-placeholder" style="background:#ccc4b8;"></div>
-        <span class="random-item-label">door wedge</span>
-      </div>
-
-      <div class="random-item" data-category="metal">
-        <div class="random-placeholder" style="background:#d4ccc0;"></div>
-        <span class="random-item-label">handle study</span>
-      </div>
-
-      <div class="random-item" data-category="sketch">
-        <div class="random-placeholder" style="background:#e0d8cc;"></div>
-        <span class="random-item-label">failed lamp v1</span>
-      </div>
-
-      <div class="random-item" data-category="wood">
-        <div class="random-placeholder" style="background:#c8c0b4;"></div>
-        <span class="random-item-label">bowl attempt</span>
-      </div>
-
-      <div class="random-item" data-category="other">
-        <div class="random-placeholder" style="background:#dcd4c8;"></div>
-        <span class="random-item-label">birthday card</span>
-      </div>
-
-      <div class="random-item" data-category="metal">
-        <div class="random-placeholder" style="background:#d0c8bc;"></div>
-        <span class="random-item-label">shelf bracket</span>
-      </div>
-
-      <div class="random-item" data-category="wood">
-        <div class="random-placeholder" style="background:#c4bcb0;"></div>
-        <span class="random-item-label">hook prototype</span>
-      </div>
-
-      <div class="random-item" data-category="sketch">
-        <div class="random-placeholder" style="background:#e8e0d4;"></div>
-        <span class="random-item-label">section drawing</span>
-      </div>
-
-      <div class="random-item" data-category="other">
-        <div class="random-placeholder" style="background:#d8d0c4;"></div>
-        <span class="random-item-label">holiday thing</span>
-      </div>
-
-      <div class="random-item" data-category="wood">
-        <div class="random-placeholder" style="background:#ccc4b8;"></div>
-        <span class="random-item-label">small shelf</span>
-      </div>
-
-      <!-- Add more items here — copy a .random-item block -->
-
-    </div>
-  </div><!-- /view-randoms -->
-
-
-  <!-- ============================================================
-       NOTES VIEW (blog placeholder)
-       ============================================================ -->
-  <div class="view" id="view-notes">
-    <p class="section-label" style="margin-bottom:2rem;">notes</p>
-    <p class="intro-body">thoughts, writings, process notes — coming soon.</p>
-  </div>
-
-</div><!-- /page -->
-
-
-<!-- Fullscreen overlay -->
-<div id="fs-overlay">
-  <div id="fs-track"></div>
-  <button id="fs-close">&#x2715;</button>
-  <div id="fs-dots"></div>
+  <div></div>
 </div>
 
 <script>
   /* ============================================================
-     Routing
+     PROJECTS — edit here.
+     Order on the homepage = order in this list.
+     - slug:   used in the link, e.g. thingsunbuilt.com/#/shade
+     - cover:  optional — homepage image (defaults to the first image).
+               Portrait covers go in the narrow lane.
+     - images: shown on the project page, in this order.
+               File names are relative to the project's folder in /images/.
+               Portrait images pair up side by side automatically.
+     - facts:  [label, text] or [label, text, link]
      ============================================================ */
-  const views    = document.querySelectorAll('.view');
-  const navLinks = document.querySelectorAll('.nav-links a');
-  const viewHistory = [];
+  const PROJECTS = [
+    {
+      slug: 'field-of-view',
+      no: '1044',
+      title: 'Field of View',
+      question: 'How do you design an exhibition for a train station?',
+      year: 2026,
+      folder: 'field-of-view',
+      images: ['fov-1.webp', 'fov-2.webp', 'fov-3.webp', 'fov-detail-1.webp', 'fov-detail-2.webp', 'fov-detail-3.webp'],
+      about: 'exhibition system for temporary installation. made for easy assembly.',
+      facts: [['materials', 'fire-resistant (b1) mdf, led'], ['made for', 'Katie Edwards, 2026']],
+    },
+    {
+      slug: 'shade',
+      no: '1032',
+      title: 'Shade',
+      question: 'How do you make a shade for a parking lot?',
+      year: 2025,
+      folder: 'shade',
+      images: ['shade-5.webp', 'shade-2.webp', 'shade-1.webp', 'shade-detail-1.webp', 'shade-construction-1.webp', 'shade-construction-2.webp', 'shade-dark.webp'],
+      about: 'A shade structure for a private parking lot. The brief was simple: keep the rain off, but make it feel considered.',
+      facts: [['materials', 'powder-coated steel, polycarbonate panels'], ['made for', 'Alissa & Alexej, 2025']],
+    },
+    {
+      slug: 'the-simple-bike',
+      no: '1000',
+      title: 'the-simple-bike',
+      question: 'How do you design a bike that is easy to fix?',
+      year: 2024,
+      folder: 'the-simple-bike',
+      images: ['explosion.webp', 'final-prototype.webp', 'concept.webp', 'frame-prototype.webp', 'frame-prototype-1.webp', 'test-ride-fail.webp', 'test-ride.webp', 'rendering-front.webp', 'rendering-parts.webp', 'rendering-explosion.webp', 'exhibition.webp'],
+      about: 'this project is my master‘s thesis and presents a blueprint for the basic version of a wooden bicycle, designed to enhance accessibility and repairability.',
+      facts: [['materials', 'different bike parts, solid douglas fir'], ['made for', 'Lund University, Sweden 2024'], ['manual', 'download (pdf)', '/images/the-simple-bike/manual.pdf']],
+    },
+    {
+      slug: 'kitchen-light',
+      no: '1043',
+      title: 'Kitchen Light',
+      question: 'How to make a sleek light for a sleek kitchen?',
+      year: 2026,
+      folder: 'kitchen-led',
+      cover: 'led-kitchen-2.webp',
+      images: ['led-kitchen-1.webp', 'led-kitchen-4.webp', 'led-kitchen-2.webp', 'led-kitchen-3.webp', 'led-kitchen-5.webp'],
+      about: 'A custom LED strip light for a minimal kitchen. The challenge was hiding the fitting entirely.',
+      facts: [['materials', 'aluminium channel, LED strip, diffuser'], ['made for', 'Susanne, 2026']],
+    },
+    {
+      slug: 'campari-light',
+      no: '1019',
+      title: 'Campari Light',
+      question: 'How to make red light not look bad?',
+      year: 2023,
+      folder: 'campari',
+      images: ['campari-6.webp', 'campari-1.webp', 'campari-2.webp', 'campari-3.webp', 'campari-4.webp', 'campari-5.webp', 'campari-7.webp'],
+      about: "A lamp using an old Campari bottle as the shade. The red glass does exactly what you'd hope.",
+      facts: [['materials', 'Campari bottle, E27 socket, oak base'], ['made for', 'Susanne, 2023']],
+    },
+    {
+      slug: 'red-table',
+      no: '1031',
+      title: 'Red Table',
+      question: 'How to make a bar table look cool?',
+      year: 2025,
+      folder: 'table',
+      images: ['red-table.webp'],
+      about: 'A bar-height table in lacquered red. The red was the brief — everything else followed.',
+      facts: [['materials', 'steel, lacquer'], ['status', 'prototype, 2025']],
+    },
+    {
+      slug: 'bar',
+      no: '1008',
+      title: 'Bar',
+      question: 'How can a bar be flexible?',
+      year: 2017,
+      folder: 'bar',
+      images: ['bar.webp', 'bar-1.webp', 'bar-2.webp', 'bar-3.webp', 'bar-4.webp', 'bar-5.webp', 'bar-6.webp', 'bar-7.webp', 'bar-8.webp', 'bar-9.webp'],
+      about: 'A modular bar unit, which opens 360° and can be reconfigured for different events and spaces.',
+      facts: [['materials', 'smoked oak veneer, orange spray paint, brass, leather'], ['status', 'prototype, 2017']],
+    },
+    {
+      slug: 'candle-holder',
+      no: '1027',
+      title: 'Candle Holder',
+      question: 'How can I make a quick welcome present with things at home?',
+      year: 2024,
+      folder: 'candle',
+      images: ['candle.webp'],
+      about: "Turned walnut base, hand-poured wax. One afternoon's work. We made twelve for a wedding.",
+      facts: [['materials', 'turned walnut, beeswax'], ['made for', 'Katie, Laura and Anna, 2024']],
+    },
+  ];
 
-  function showView(id) {
-    views.forEach(v => v.classList.remove('active'));
-    const target = document.getElementById('view-' + id);
-    if (target) { target.classList.add('active'); viewHistory.push(id); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    navLinks.forEach(a => a.classList.toggle('active', a.id === 'link-' + id));
-  }
 
-  history.back = function() { viewHistory.pop(); showView(viewHistory.pop() || 'home'); };
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const src = (p, file) => `/images/${p.folder}/${file}`;
 
   /* ============================================================
-     Randoms filter
+     HOMEPAGE BOARD
+     The board is split into a wide lane (columns 1–7) and a narrow lane
+     (8–12). Each card goes into whichever lane is shorter (portrait covers
+     always take the narrow one), so the gaps are even everywhere and never
+     more than two sit side by side. On phones it is a single lane.
      ============================================================ */
-  function filterRandoms(category, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.random-item').forEach(item => {
-      item.classList.toggle('hidden', category !== 'all' && item.dataset.category !== category);
+  const LANES       = [[1, 7], [8, 5]];   /* [start column, width] of 12 */
+  const PHONE_LANES = [[1, 6]];           /* of 6 */
+  const phone = matchMedia('(max-width: 600px)');
+
+  function renderGrid() {
+    $('#grid').innerHTML = PROJECTS.map(p => `
+      <a class="card" href="#/${p.slug}">
+        <div class="card-media"><img src="${src(p, p.cover || p.images[0])}" alt="${esc(p.title)}"></div>
+        <p class="cap"><b>${esc(p.title)}</b><span>${p.no}</span><span>${p.year}</span></p>
+      </a>`).join('');
+    document.querySelectorAll('#grid img').forEach(img => img.addEventListener('load', layoutBoard));
+    layoutBoard();
+  }
+
+  /* The board is made of 4px rows; each card claims as many as it is tall
+     and starts at the bottom of its lane. */
+  function layoutBoard() {
+    const cols  = new Array(phone.matches ? 6 : 12).fill(0);
+    const lanes = phone.matches ? PHONE_LANES : LANES;
+    const top   = (col, span) => Math.max(...cols.slice(col - 1, col - 1 + span));
+
+    document.querySelectorAll('#grid .card').forEach(card => {
+      const img  = card.querySelector('img');
+      const tall = img.naturalHeight > img.naturalWidth;
+      const [col, span] = tall
+        ? lanes.reduce((a, b) => b[1] < a[1] ? b : a)
+        : lanes.reduce((best, l) => top(...l) < top(...best) ? l : best);
+
+      card.style.gridColumn = `${col} / span ${span}`;
+      const t    = top(col, span);
+      const rows = Math.ceil(card.getBoundingClientRect().height / 4);
+      card.style.gridRow = `${t + 1} / span ${rows}`;
+      for (let c = col - 1; c < col - 1 + span; c++) cols[c] = t + rows;
     });
+  }
+
+  new ResizeObserver(layoutBoard).observe($('#grid'));
+  phone.addEventListener('change', layoutBoard);
+
+  /* ============================================================
+     PROJECT PAGE
+     ============================================================ */
+  function renderProject(p) {
+    const next = PROJECTS[(PROJECTS.indexOf(p) + 1) % PROJECTS.length];
+    const facts = p.facts.map(([k, v, href]) =>
+      `<dt>${esc(k)}</dt><dd>${href ? `<a href="${href}" target="_blank" rel="noopener">${esc(v)}</a>` : esc(v)}</dd>`
+    ).join('');
+
+    $('#view-project').innerHTML = `
+      <header class="p-head">
+        <div class="large">
+          <h1><b>${esc(p.title)}</b> <span class="muted">${p.no} ${p.year}</span></h1>
+          <p class="p-q">${esc(p.question)}</p>
+        </div>
+        <div>
+          <p class="p-about">${esc(p.about)}</p>
+          <dl class="p-facts">${facts}</dl>
+        </div>
+      </header>
+      <div class="gallery">
+        ${p.images.map((f, i) => `
+          <figure data-i="${i}"><img src="${src(p, f)}" alt="${esc(p.title)}, image ${i + 1}" ${i > 1 ? 'loading="lazy"' : ''}></figure>`).join('')}
+      </div>
+      <a class="next large" href="#/${next.slug}"><span class="muted">next</span> <b>${esc(next.title)}</b> →</a>`;
+
+    const figs = [...document.querySelectorAll('.gallery figure')];
+    figs.forEach(fig => {
+      const img = fig.querySelector('img');
+      const done = () => { fig.classList.toggle('tall', img.naturalHeight > img.naturalWidth); layoutSolos(figs); };
+      img.complete && img.naturalWidth ? done() : img.addEventListener('load', done, { once: true });
+      fig.addEventListener('click', () => openLightbox(p, +fig.dataset.i));
+    });
+
+    document.title = `${p.title} — Things Unbuilt`;
+  }
+
+  /* a portrait image without a portrait neighbour is centred on its own */
+  function layoutSolos(figs) {
+    let run = [];
+    const flush = () => { run.forEach((f, i) => f.classList.toggle('solo', run.length % 2 === 1 && i === run.length - 1)); run = []; };
+    figs.forEach(f => f.classList.contains('tall') ? run.push(f) : flush());
+    flush();
   }
 
   /* ============================================================
-     FULLSCREEN
-     Each slide is exactly 100vw wide — positioning is pure arithmetic,
-     no DOM measurement needed, which makes transitions perfectly smooth.
+     Routing (#/ = home, #/about, #/<slug> = project)
      ============================================================ */
-  const fsOverlay  = document.getElementById('fs-overlay');
-  const fsTrackEl  = document.getElementById('fs-track');
-  const fsDotsEl   = document.getElementById('fs-dots');
-  const fsCloseBtn = document.getElementById('fs-close');
+  let homeScroll = 0;
 
-  let fsTotal   = 0;   /* number of real slides */
-  let fsCurrent = 1;   /* index in track (1 = first real slide) */
-  let fsLocked  = false; /* prevents jank from rapid clicks */
+  function route() {
+    const slug = location.hash.replace(/^#\/?/, '');
+    const project = PROJECTS.find(p => p.slug === slug);
+    const wasHome = $('#view-home').classList.contains('active');
+    if (wasHome) homeScroll = scrollY;
 
-  /* Called by image click or the ⛶ button */
-  function openFS(event, el, projectId) {
-    if (!projectId) {
-      /* derive id from the ⛶ button context */
-      const wrap     = el.closest ? el.closest('.project-img-wrap') : el;
-      const project  = wrap && wrap.closest('.project');
-      const expanded = project && project.nextElementSibling;
-      projectId      = expanded && expanded.id ? expanded.id.replace('expand-', '') : null;
-    }
-    if (!projectId) return;
+    const view = project ? 'project' : slug === 'about' ? 'about' : 'home';
+    if (project) renderProject(project);
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view));
+    if (view !== 'project') document.title = view === 'about' ? 'About — Things Unbuilt' : 'Things Unbuilt';
+    window.scrollTo({ top: view === 'home' && !wasHome ? homeScroll : 0, behavior: 'instant' });
 
-    const expanded = document.getElementById('expand-' + projectId);
-    if (!expanded) return;
-
-    const sources = Array.from(expanded.querySelectorAll('.exp-slide'));
-    if (sources.length === 0) return;
-
-    fsTotal  = sources.length;
-    fsLocked = false;
-
-    /* Build: [lastClone, slide0…slideN-1, firstClone] */
-    fsTrackEl.innerHTML = '';
-    fsDotsEl.innerHTML  = '';
-
-    const allSources = [sources[sources.length - 1], ...sources, sources[0]];
-    allSources.forEach(source => {
-      const slide = document.createElement('div');
-      slide.className = 'fs-slide';
-
-      if (source.classList.contains('exp-text-slide')) {
-        slide.classList.add('fs-text-slide');
-        const body = source.querySelector('.exp-text-body');
-        if (body) {
-          const inner = document.createElement('div');
-          inner.className = 'fs-text-body';
-          inner.innerHTML = body.innerHTML;
-          slide.appendChild(inner);
-        }
-      } else {
-        const srcImg = source.querySelector('img');
-        if (srcImg) {
-          const img = document.createElement('img');
-          img.src = srcImg.src;
-          img.alt = srcImg.alt || '';
-          slide.appendChild(img);
-        }
-      }
-      fsTrackEl.appendChild(slide);
-    });
-
-    /* Dots — one per real slide */
-    sources.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'fs-dot';
-      dot.addEventListener('click', e => { e.stopPropagation(); fsGoTo(i + 1); });
-      fsDotsEl.appendChild(dot);
-    });
-
-    /* Show overlay, jump to first slide with no animation */
-    fsCurrent = 1;
-    fsTrackEl.style.transition = 'none';
-    fsSetTranslate();
-    fsTrackEl.offsetHeight; /* force reflow */
-
-    fsOverlay.classList.add('fs-open');
-    document.body.classList.add('fs-active');
-    fsUpdateDots();
+    document.querySelectorAll('[data-nav]').forEach(a => a.toggleAttribute('aria-current', a.dataset.nav === view));
   }
 
-  /* Position the track — each slide is exactly 100vw, so it's pure math */
-  function fsSetTranslate() {
-    fsTrackEl.style.transform = `translateX(${-fsCurrent * 100}vw)`;
+  /* ============================================================
+     Lightbox — arrows, click left/right, swipe, Esc
+     ============================================================ */
+  const lb = { el: $('#lightbox'), img: $('#lb-img'), p: null, i: 0 };
+
+  function openLightbox(p, i) {
+    lb.p = p;
+    $('#lb-title').innerHTML = `<b>${esc(p.title)}</b>`;
+    lb.el.classList.add('open');
+    document.body.classList.add('lb-open');
+    lbGo(i);
   }
 
-  function fsGoTo(index, animate = true) {
-    if (fsLocked && animate) return;
-    fsCurrent = index;
-    if (animate) {
-      fsLocked = true;
-      fsTrackEl.style.transition = 'transform 0.48s cubic-bezier(0.4, 0, 0.2, 1)';
-    } else {
-      fsTrackEl.style.transition = 'none';
-    }
-    fsSetTranslate();
-    if (!animate) fsTrackEl.offsetHeight;
-    fsUpdateDots();
+  function lbGo(i) {
+    const n = lb.p.images.length;
+    lb.i = (i + n) % n;
+    lb.img.src = src(lb.p, lb.p.images[lb.i]);
+    lb.img.alt = `${lb.p.title}, image ${lb.i + 1}`;
+    $('#lb-count').textContent = `${lb.i + 1} / ${n}`;
   }
 
-  /* After arriving at a clone → silently snap to the real slide */
-  fsTrackEl.addEventListener('transitionend', () => {
-    fsLocked = false;
-    if (fsCurrent === 0) {
-      fsTrackEl.style.transition = 'none';
-      fsCurrent = fsTotal;
-      fsSetTranslate();
-      fsTrackEl.offsetHeight;
-      fsUpdateDots();
-    } else if (fsCurrent === fsTotal + 1) {
-      fsTrackEl.style.transition = 'none';
-      fsCurrent = 1;
-      fsSetTranslate();
-      fsTrackEl.offsetHeight;
-      fsUpdateDots();
-    }
-  });
-
-  function fsUpdateDots() {
-    let real = fsCurrent - 1;
-    if (fsCurrent === 0)           real = fsTotal - 1;
-    if (fsCurrent === fsTotal + 1) real = 0;
-    fsDotsEl.querySelectorAll('.fs-dot').forEach((d, i) => d.classList.toggle('active', i === real));
+  function closeLightbox() {
+    lb.el.classList.remove('open');
+    document.body.classList.remove('lb-open');
   }
 
-  /* Click left/right to navigate */
-  fsOverlay.addEventListener('click', e => {
-    if (fsCloseBtn.contains(e.target)) return;
-    if (e.target.classList.contains('fs-dot')) return;
-    if (e.clientX < window.innerWidth / 2) fsGoTo(fsCurrent - 1);
-    else                                    fsGoTo(fsCurrent + 1);
-  });
-
-  function fsClose() {
-    fsOverlay.classList.remove('fs-open');
-    document.body.classList.remove('fs-active');
-    /* Clear track to free memory */
-    setTimeout(() => { fsTrackEl.innerHTML = ''; fsDotsEl.innerHTML = ''; }, 300);
-  }
-
-  fsCloseBtn.addEventListener('click', fsClose);
+  $('#lb-close').addEventListener('click', closeLightbox);
+  $('.lb-prev').addEventListener('click', () => lbGo(lb.i - 1));
+  $('.lb-next').addEventListener('click', () => lbGo(lb.i + 1));
 
   document.addEventListener('keydown', e => {
-    if (!fsOverlay.classList.contains('fs-open')) return;
-    if (e.key === 'Escape')     fsClose();
-    if (e.key === 'ArrowRight') fsGoTo(fsCurrent + 1);
-    if (e.key === 'ArrowLeft')  fsGoTo(fsCurrent - 1);
+    if (!lb.el.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') lbGo(lb.i + 1);
+    if (e.key === 'ArrowLeft') lbGo(lb.i - 1);
+  });
+
+  let touchX = null;
+  lb.el.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  lb.el.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) lbGo(lb.i + (dx < 0 ? 1 : -1));
+    touchX = null;
   });
 
   /* ============================================================
      Init
      ============================================================ */
-  showView('home');
-
-    /* ============================================================
-     IMAGE FALLBACK
-     ============================================================ */
-  document.querySelectorAll('img').forEach(img => {
-    img.addEventListener('error', function handleImageError() {
-      const src = this.getAttribute('src');
-
-      if (!src || !src.toLowerCase().endsWith('.webp')) return;
-
-      const step = parseInt(this.dataset.fallbackStep || '0', 10);
-
-      if (step === 0) {
-        this.dataset.fallbackStep = '1';
-        this.src = src.replace(/\.webp$/i, '.jpg.webp');
-      } else if (step === 1) {
-        this.dataset.fallbackStep = '2';
-        this.src = src.replace(/\.webp$/i, '.jpg');
-      }
-    });
-  });
-  
+  renderGrid();
+  window.addEventListener('hashchange', route);
+  route();
 </script>
 
 </body>
