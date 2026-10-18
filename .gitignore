@@ -1,2 +1,14 @@
 node_modules
 .DS_Store
+
+# Full-resolution originals and working files live outside the repo, in
+# Desktop/Stuff/homepage things unbuilt/originals. The site only uses .webp.
+images-backup/
+/"images/
+images/public/
+images/calendars/
+images/**/*.jpg
+images/**/*.JPG
+images/**/*.jpeg
+images/**/*.png
+images/**/*.psd
